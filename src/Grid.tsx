@@ -1,11 +1,23 @@
-import React from 'react';
+import React from "react";
+import GridLayout from "./GridLayout";
 
-const Grid: React.FC = () => {
-	return (
-		<div className="h-full bg-darkgreen">
+interface ComponentsProps {  }
+interface ComponentsState {  }
 
-		</div>
-	);
-};
+class Grid extends React.Component<ComponentsProps, ComponentsState> {
+	constructor(props: ComponentsProps) {
+		super(props);
+
+		this.state = { }
+	}
+
+	render () {
+		return (
+			<div className="h-full pt-20 bg-darkgreen">
+				<GridLayout/>
+			</div>
+		)
+	};
+}
 
 export default Grid;

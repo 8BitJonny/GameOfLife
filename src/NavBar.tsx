@@ -10,7 +10,7 @@ const controlClassname = "h-full -mt-10 ml-8 inline-block";
 
 const NavBar: React.FC = () => {
 	return (
-		<div className="flex items-center justify-between flex-wrap h-20 bg-black px-6 py-1 text-white font-extrabold text-5xl">
+		<div className="absolute flex items-center justify-between flex-wrap w-full h-20 bg-black px-6 py-1 text-white font-extrabold text-5xl">
 			<div>
 				<span>Game of Life</span>
 			</div>
