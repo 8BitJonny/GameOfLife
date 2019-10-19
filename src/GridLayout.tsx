@@ -26,7 +26,7 @@ export default class GridLayout extends React.Component<ComponentsProps, Compone
 			for (let j = 0; j < this.props.size.w; j++) {
 				row.push(<Cell key={i-j} alive={this.props.gridState[i][j]} />)
 			}
-			grid.push(<div key={i} className={"flex flex-1 py-1"}>{row}</div>)
+			grid.push(<div key={i} className={"row flex flex-1 py-1"}>{row}</div>)
 		}
 		return grid
 	}

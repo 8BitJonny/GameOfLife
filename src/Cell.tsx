@@ -12,7 +12,7 @@ class Cell extends React.Component<ComponentsProps, ComponentsState> {
 
 	render () {
 		return (
-			<div className={(this.props.alive ? "bg-grey" : "bg-green" ) + " flex-1 inline-block mx-1 rounded"} />
+			<div className={(this.props.alive ? "bg-grey" : "bg-green" ) + " cell flex-1 inline-block mx-1 rounded"} />
 		);
 	}
 }

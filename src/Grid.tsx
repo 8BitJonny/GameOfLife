@@ -12,30 +12,34 @@ class Grid extends React.Component<ComponentsProps, ComponentsState> {
 		this.state = {
 			cellSize: 30,
 			size: { h: 30, w: 60 },
-			gridState: this.randomizeState(30,60)
+			gridState: this.generateNewRandomState(30,60)
 		}
 	}
 
 	componentDidMount(): void {
 		const wrapperElement = document.getElementById("GridWrapper");
-		if (wrapperElement) this.setState({
-			size: {
-				h: Math.floor(wrapperElement.clientHeight / this.state.cellSize),
-				w: Math.floor(wrapperElement.clientWidth / this.state.cellSize)}
-		});
+		if (wrapperElement) {
+			const h =  Math.floor(wrapperElement.clientHeight / this.state.cellSize);
+			const w = Math.floor(wrapperElement.clientWidth / this.state.cellSize);
+
+			this.setState({
+				size: {h, w},
+				gridState: this.generateNewRandomState(h, w)
+			});
+		}
 	}
 
 	handleControlEvent(event: ControlEvent) {
 		switch (event) {
 			case "RAND":
-				this.randomizeState();
+				this.setState({gridState: this.generateNewRandomState()});
 				return;
 			default:
 				return;
 		}
 	}
 
-	randomizeState(rowCount: number = this.state.size.h, columnCount: number = this.state.size.w ): boolean[][] {
+	generateNewRandomState(rowCount: number = this.state.size.h, columnCount: number = this.state.size.w ): boolean[][] {
 		let newState: boolean[][] = [];
 		for (let rowIndex = 0; rowIndex < rowCount; rowIndex ++) {
 			newState[rowIndex] = [];
@@ -43,7 +47,6 @@ class Grid extends React.Component<ComponentsProps, ComponentsState> {
 				newState[rowIndex].push( Math.random() > 0.5 );
 			}
 		}
-		if (this.state) this.setState({gridState: newState});
 
 		return newState;
 	}
