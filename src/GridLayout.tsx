@@ -1,35 +1,30 @@
 import React from 'react';
 import Cell from "./Cell";
 
-interface ComponentsProps { }
-interface ComponentsState { cellSize: number, size: { h: number, w: number } }
+interface ComponentsProps { gridState: boolean[][], cellSize: number, size: { h: number, w: number } }
+interface ComponentsState { }
 
 export default class GridLayout extends React.Component<ComponentsProps, ComponentsState> {
 	constructor(props: ComponentsProps) {
 		super(props);
 
-		this.state = {
-			cellSize: 30,
-			size: { h: 0, w: 0 }
-		}
+		this.validateProps(props);
+
+		this.state = { };
 	}
 
-	componentDidMount(): void {
-		const wrapperElement = document.getElementById("GridWrapper");
-		if (wrapperElement) this.setState({ size: { h: wrapperElement.clientHeight, w: wrapperElement.clientWidth} });
-
+	validateProps(props: ComponentsProps) {
+		if (props.gridState.length !== props.size.h) console.error("Invalid Props: The GridState Row Count doesn't match with the size.h ");
+		if (props.gridState[0].length !== props.size.w) console.error("Invalid Props: The GridState Column Count doesn't match with the size.w ");
 	}
 
 	createGrid() {
-		const rowCount = Math.floor(this.state.size.h / this.state.cellSize);
-		const columnCount = Math.floor(this.state.size.w / this.state.cellSize);
-
 		let grid = [];
 
-		for (let i = 0; i < rowCount; i++) {
+		for (let i = 0; i < this.props.size.h; i++) {
 			let row = [];
-			for (let j = 0; j < columnCount; j++) {
-				row.push(<Cell key={i-j} />)
+			for (let j = 0; j < this.props.size.w; j++) {
+				row.push(<Cell key={i-j} alive={this.props.gridState[i][j]} />)
 			}
 			grid.push(<div key={i} className={"flex flex-1 py-1"}>{row}</div>)
 		}
@@ -38,12 +33,8 @@ export default class GridLayout extends React.Component<ComponentsProps, Compone
 
 	render() {
 		return(
-			<div className="h-full p-2">
-				<div id="GridWrapper" className={"h-full"}>
-					<div className={"flex flex-col"} style={{ width: this.state.size.w, height: this.state.size.h }}>
-						{this.createGrid()}
-					</div>
-				</div>
+			<div className={"flex flex-col"} style={{ width: this.props.size.w * this.props.cellSize, height: this.props.size.h * this.props.cellSize }}>
+				{this.createGrid()}
 			</div>
 		)
 	}
