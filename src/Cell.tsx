@@ -1,6 +1,6 @@
 import React from 'react';
 
-interface ComponentsProps { alive: boolean }
+interface ComponentsProps { alive: 0 | 1 }
 interface ComponentsState {  }
 
 class Cell extends React.Component<ComponentsProps, ComponentsState> {
