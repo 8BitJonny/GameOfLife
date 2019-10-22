@@ -1,7 +1,8 @@
 import React from 'react';
 import Cell from "./Cell";
+import Grid from "./model/grid";
 
-interface ComponentsProps { gridState: boolean[][], cellSize: number, size: { h: number, w: number } }
+interface ComponentsProps { gridState: Grid, cellSize: number, size: { h: number, w: number } }
 interface ComponentsState { }
 
 export default class GridLayout extends React.Component<ComponentsProps, ComponentsState> {

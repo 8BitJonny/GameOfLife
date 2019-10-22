@@ -32,11 +32,13 @@ it("forwards event messages from navbar to grid", () => {
 		render(<App />, container);
 	});
 
-	const button = container!.querySelector("[id='PAUSE']");
+	const buttonIds = ["PAUSE", "PLAY"];
+
+	const buttons = buttonIds.map((id: string) => {return container!.querySelector("[id=" + id + "]")});
 
 	act(() => {
-		button!.dispatchEvent(new MouseEvent('click', {bubbles: true}));
+		buttons.forEach((button) => { button!.dispatchEvent(new MouseEvent('click', {bubbles: true}))});
 	});
 
-	expect(handleControlEventFake).toHaveBeenCalledTimes(1);
+	expect(handleControlEventFake).toHaveBeenCalledTimes(buttonIds.length);
 });
