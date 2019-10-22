@@ -1,11 +1,12 @@
 # Game of Life
 Conveys Game of Life with a modern browser interface to play with.
 
-*First design draft*
+##### First design draft
 ![FirstDraft](./Screenshots/FirstDraft.png)
 
-*First implementation*
+##### First implementation
 ![FirstImplementation](./Screenshots/FirstImplementation.gif)
+**Note:** The speed looks a bit unstable but this is caused by the video capturing tool not the website itself.
 
 ## Feature ideas
 - [ ] Animate Cell state change
