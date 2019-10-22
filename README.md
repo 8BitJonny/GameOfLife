@@ -4,6 +4,9 @@ Conveys Game of Life with a modern browser interface to play with.
 *First design draft*
 ![FirstDraft](./Screenshots/FirstDraft.png)
 
+*First implementation*
+![FirstImplementation](./Screenshots/FirstImplementation.gif)
+
 ## Feature ideas
 - [ ] Animate Cell state change
 - [ ] Grid Layout controls (Cell Size, Cell Spacing)
