@@ -5,7 +5,7 @@ import GridObject from "./model/grid";
 import Alive from "./model/alive";
 
 interface ComponentsProps {  }
-interface ComponentsState { play: boolean, cellSize: number, size: { h: number, w: number }, gridState: GridObject }
+interface ComponentsState { play: boolean, cellSize: number, size: { h: number, w: number }, gridState: GridObject, loadingIn: boolean }
 
 class Grid extends React.Component<ComponentsProps, ComponentsState> {
 	constructor(props: ComponentsProps) {
@@ -15,7 +15,8 @@ class Grid extends React.Component<ComponentsProps, ComponentsState> {
 			play: false,
 			cellSize: 25,
 			size: { h: 30, w: 60 },
-			gridState: this.generateEmptyState(30,60)
+			gridState: this.generateEmptyState(30,60),
+			loadingIn: false
 		}
 	}
 
@@ -27,7 +28,8 @@ class Grid extends React.Component<ComponentsProps, ComponentsState> {
 
 			this.setState({
 				size: {h, w},
-				gridState: this.generateEmptyState(h, w)
+				gridState: this.generateEmptyState(h, w),
+				loadingIn: false
 			});
 		}
 	}
@@ -35,13 +37,13 @@ class Grid extends React.Component<ComponentsProps, ComponentsState> {
 	handleControlEvent(event: ControlEvent) {
 		switch (event) {
 			case "PLAY":
-				if (!this.state.play) this.setState({play: true}, () => {this.handleNextState()});
+				if (!this.state.play) this.setState({play: true, loadingIn: false}, () => {this.handleNextState()});
 				return;
 			case "PAUSE":
 				this.setState({play: false});
 				return;
 			case "RAND":
-				this.setState({gridState: this.generateNewRandomState()});
+				this.setState({gridState: this.generateNewRandomState(), loadingIn: true});
 				return;
 			default:
 				return;
@@ -53,7 +55,7 @@ class Grid extends React.Component<ComponentsProps, ComponentsState> {
 
 		this.setState({gridState: this.calculateNextGrid( this.state.gridState )});
 
-		setTimeout(() => {this.handleNextState()}, 200)
+		setTimeout(() => {this.handleNextState()}, 150)
 	}
 
 	calculateNextGrid(grid: GridObject, rowCount: number = this.state.size.h, columnCount: number = this.state.size.w): GridObject {
@@ -102,7 +104,7 @@ class Grid extends React.Component<ComponentsProps, ComponentsState> {
 		for (let rowIndex = 0; rowIndex < rowCount; rowIndex ++) {
 			newState[rowIndex] = [];
 			for (let columnIndex = 0; columnIndex < columnCount; columnIndex ++) {
-				newState[rowIndex].push( Math.random() > 0.5 ? 1 : 0 );
+				newState[rowIndex].push( Math.random() > 0.7 ? 1 : 0 );
 			}
 		}
 		return newState;
@@ -124,7 +126,7 @@ class Grid extends React.Component<ComponentsProps, ComponentsState> {
 			<div className="h-full pt-20 bg-darkgreen">
 				<div className="h-full p-2">
 					<div id="GridWrapper" className={"h-full flex justify-center content-center"}>
-						<GridLayout gridState={this.state.gridState} cellSize={this.state.cellSize} size={this.state.size}/>
+						<GridLayout gridState={this.state.gridState} cellSize={this.state.cellSize} size={this.state.size} loadingAnimation={this.state.loadingIn}/>
 					</div>
 				</div>
 			</div>
