@@ -1,10 +1,7 @@
 import React from "react";
-import SlowDown from "./static/SlowDown.svg";
 import Play from "./static/Play.svg";
-import Faster from "./static/Faster.svg";
 import Randomize from "./static/Randomize.svg";
 import Pause from "./static/Pause.svg";
-import Edit from "./static/Edit.svg";
 import {ControlEvent} from "./model/controlEvent";
 
 const controlClassname = "h-full -mt-10 ml-8 inline-block cursor-pointer";
@@ -26,12 +23,12 @@ class NavBar extends React.Component<ComponentsProps, ComponentsState> {
 					<span>Game of Life</span>
 				</div>
 				<div id="controls" className="h-10">
-					<img id="SLOW" className={controlClassname} onClick={this.props.actionCallBack.bind(this,"SLOW")} src={SlowDown} alt=""/>
+					{/*<img id="SLOW" className={controlClassname} onClick={this.props.actionCallBack.bind(this,"SLOW")} src={SlowDown} alt=""/>*/}
 					<img id="PLAY" className={controlClassname} onClick={this.props.actionCallBack.bind(this,"PLAY")} src={Play} alt=""/>
-					<img id="FAST" className={controlClassname} onClick={this.props.actionCallBack.bind(this,"FAST")} src={Faster} alt=""/>
-					<img id="RAND" className={controlClassname} onClick={this.props.actionCallBack.bind(this,"RAND")} src={Randomize} alt=""/>
+					{/*<img id="FAST" className={controlClassname} onClick={this.props.actionCallBack.bind(this,"FAST")} src={Faster} alt=""/>*/}
 					<img id="PAUSE" className={controlClassname} onClick={this.props.actionCallBack.bind(this,"PAUSE")} src={Pause} alt=""/>
-					<img id="EDIT" className={controlClassname} onClick={this.props.actionCallBack.bind(this,"EDIT")} src={Edit} alt=""/>
+					<img id="RAND" className={controlClassname} onClick={this.props.actionCallBack.bind(this,"RAND")} src={Randomize} alt=""/>
+					{/*<img id="EDIT" className={controlClassname} onClick={this.props.actionCallBack.bind(this,"EDIT")} src={Edit} alt=""/>*/}
 				</div>
 			</div>
 		);

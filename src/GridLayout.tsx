@@ -1,9 +1,14 @@
-import React from 'react';
+import React, {CSSProperties} from 'react';
 import Cell from "./Cell";
 import Grid from "./model/grid";
+import remap from "./utils";
 
-interface ComponentsProps { gridState: Grid, cellSize: number, size: { h: number, w: number } }
+interface ComponentsProps { gridState: Grid, cellSize: number, size: { h: number, w: number }, loadingAnimation: boolean }
 interface ComponentsState { }
+
+let loadingAnimation: CSSProperties = {
+	transition: "background-color 1s"
+};
 
 export default class GridLayout extends React.Component<ComponentsProps, ComponentsState> {
 	constructor(props: ComponentsProps) {
@@ -22,12 +27,15 @@ export default class GridLayout extends React.Component<ComponentsProps, Compone
 	createGrid() {
 		let grid = [];
 
+		let cellStyle = this.props.loadingAnimation ? loadingAnimation : {};
+
 		for (let i = 0; i < this.props.size.h; i++) {
 			let row = [];
 			for (let j = 0; j < this.props.size.w; j++) {
-				row.push(<Cell key={i-j} alive={this.props.gridState[i][j]} />)
+				if (cellStyle.transition) cellStyle.transition = "background-color 1s ease " + remap(i+j, {min: 0, max: this.props.size.h+this.props.size.w}, {min: 0, max: 2}) + "s";
+				row.push(<Cell key={i-j} className="mx-1" style={{margin: "0 3px", ...cellStyle}} alive={this.props.gridState[i][j]} />)
 			}
-			grid.push(<div key={i} className={"row flex flex-1 py-1"}>{row}</div>)
+			grid.push(<div key={i} className="row flex flex-1 py-1" style={{padding: "3px 0"}}>{row}</div>)
 		}
 		return grid
 	}
