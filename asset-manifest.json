@@ -1,0 +1,24 @@
+{
+  "files": {
+    "main.css": "/GameOfLife/static/css/main.5db7529d.chunk.css",
+    "main.js": "/GameOfLife/static/js/main.bc99afbb.chunk.js",
+    "main.js.map": "/GameOfLife/static/js/main.bc99afbb.chunk.js.map",
+    "runtime-main.js": "/GameOfLife/static/js/runtime-main.0a60a216.js",
+    "runtime-main.js.map": "/GameOfLife/static/js/runtime-main.0a60a216.js.map",
+    "static/js/2.74e32b30.chunk.js": "/GameOfLife/static/js/2.74e32b30.chunk.js",
+    "static/js/2.74e32b30.chunk.js.map": "/GameOfLife/static/js/2.74e32b30.chunk.js.map",
+    "index.html": "/GameOfLife/index.html",
+    "precache-manifest.119f8619ca2c95d5b6bc76a33b523bf6.js": "/GameOfLife/precache-manifest.119f8619ca2c95d5b6bc76a33b523bf6.js",
+    "service-worker.js": "/GameOfLife/service-worker.js",
+    "static/css/main.5db7529d.chunk.css.map": "/GameOfLife/static/css/main.5db7529d.chunk.css.map",
+    "static/media/Pause.svg": "/GameOfLife/static/media/Pause.b607af87.svg",
+    "static/media/Play.svg": "/GameOfLife/static/media/Play.670d0d6e.svg",
+    "static/media/Randomize.svg": "/GameOfLife/static/media/Randomize.2053a1f0.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.0a60a216.js",
+    "static/js/2.74e32b30.chunk.js",
+    "static/css/main.5db7529d.chunk.css",
+    "static/js/main.bc99afbb.chunk.js"
+  ]
+}
