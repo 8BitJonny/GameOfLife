@@ -1,3 +1,6 @@
+
+<a href="https://play-pago.com" alt="Website Status">
+        <img src="https://img.shields.io/website/https/www.play-pago.com.svg?up_message=online" /></a>
 <a href="https://github.com/8BitJonny/JsGame/blob/master/package.json" alt="Version">
         <img src="https://img.shields.io/github/package-json/v/8BitJonny/JsGame.svg" /></a>
 <a href="https://github.com/8BitJonny/JsGame/blob/master/LICENSE.md" alt="License">
