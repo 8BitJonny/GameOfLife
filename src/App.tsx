@@ -21,7 +21,7 @@ class App extends React.Component<ComponentsProps, ComponentsState> {
 
     render () {
         return (
-            <div className="App">
+            <div className="App flex flex-col">
               <NavBar actionCallBack={this.messageToGrid.bind(this)} />
               <Grid ref={this.gridRef} />
             </div>

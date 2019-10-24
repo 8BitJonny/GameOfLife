@@ -4,8 +4,6 @@ import Randomize from "./static/Randomize.svg";
 import Pause from "./static/Pause.svg";
 import {ControlEvent} from "./model/controlEvent";
 
-const controlClassname = "h-full -mt-10 ml-8 inline-block cursor-pointer";
-
 interface ComponentsProps { actionCallBack: (event: ControlEvent) => void }
 interface ComponentsState { }
 
@@ -17,12 +15,13 @@ class NavBar extends React.Component<ComponentsProps, ComponentsState> {
 	}
 
 	render () {
+		const controlClassname = "h-full ml-8 inline-block cursor-pointer";
 		return (
-			<div className="absolute flex items-center justify-between flex-wrap w-full h-20 bg-black px-6 py-1 text-white font-extrabold text-5xl">
+			<div className="w-full h-12 px-6 flex flex-wrap items-center justify-between bg-black">
 				<div>
-					<span>Game of Life</span>
+					<span className="text-white font-extrabold text-3xl">Game of Life</span>
 				</div>
-				<div id="controls" className="h-10">
+				<div id="controls" className="">
 					{/*<img id="SLOW" className={controlClassname} onClick={this.props.actionCallBack.bind(this,"SLOW")} src={SlowDown} alt=""/>*/}
 					<img id="PLAY" className={controlClassname} onClick={this.props.actionCallBack.bind(this,"PLAY")} src={Play} alt=""/>
 					{/*<img id="FAST" className={controlClassname} onClick={this.props.actionCallBack.bind(this,"FAST")} src={Faster} alt=""/>*/}
