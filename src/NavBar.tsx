@@ -3,8 +3,9 @@ import Play from "./static/Play.svg";
 import Randomize from "./static/Randomize.svg";
 import Pause from "./static/Pause.svg";
 import {ControlEvent} from "./model/controlEvent";
+import {State} from "./model/state";
 
-interface ComponentsProps { actionCallBack: (event: ControlEvent) => void }
+interface ComponentsProps { gridControlState: State, actionCallBack: (event: ControlEvent) => void }
 interface ComponentsState { }
 
 class NavBar extends React.Component<ComponentsProps, ComponentsState> {
@@ -14,6 +15,21 @@ class NavBar extends React.Component<ComponentsProps, ComponentsState> {
 		this.state = { }
 	}
 
+	handleClick(controlEvent: ControlEvent) {
+		if (!this.shouldBeDisabled(controlEvent)) this.props.actionCallBack(controlEvent);
+	}
+
+	shouldBeDisabled(controlEvent: ControlEvent): boolean {
+		switch (this.props.gridControlState) {
+			case "PLAY":
+				return controlEvent === "RAND";
+			case "PAUSE":
+				return false;
+			default:
+				return false;
+		}
+	}
+
 	render () {
 		const controlClassname = "h-full ml-8 inline-block cursor-pointer";
 		return (
@@ -21,12 +37,15 @@ class NavBar extends React.Component<ComponentsProps, ComponentsState> {
 				<div>
 					<span className="text-white font-extrabold text-3xl">Game of Life</span>
 				</div>
-				<div id="controls" className="">
-					{/*<img id="SLOW" className={controlClassname} onClick={this.props.actionCallBack.bind(this,"SLOW")} src={SlowDown} alt=""/>*/}
-					<img id="PLAY" className={controlClassname} onClick={this.props.actionCallBack.bind(this,"PLAY")} src={Play} alt=""/>
+				<div id="controls" className="h-full py-3">
+					{ this.props.gridControlState === "PAUSE" ? (
+						<img id="PLAY"  className={controlClassname + (this.shouldBeDisabled("PLAY")  ? " cursor-not-allowed" : "")} onClick={this.handleClick.bind(this,"PLAY")} src={Play} alt=""/>
+					) : (
+						<img id="PAUSE" className={controlClassname + (this.shouldBeDisabled("PAUSE") ? " cursor-not-allowed" : "")} onClick={this.handleClick.bind(this,"PAUSE")} src={Pause} alt=""/>
+					) }
+					<img id="RAND"  className={controlClassname + (this.shouldBeDisabled("RAND")  ? " cursor-not-allowed" : "")} onClick={this.handleClick.bind(this,"RAND")} src={Randomize} alt=""/>
 					{/*<img id="FAST" className={controlClassname} onClick={this.props.actionCallBack.bind(this,"FAST")} src={Faster} alt=""/>*/}
-					<img id="PAUSE" className={controlClassname} onClick={this.props.actionCallBack.bind(this,"PAUSE")} src={Pause} alt=""/>
-					<img id="RAND" className={controlClassname} onClick={this.props.actionCallBack.bind(this,"RAND")} src={Randomize} alt=""/>
+					{/*<img id="SLOW" className={controlClassname} onClick={this.props.actionCallBack.bind(this,"SLOW")} src={SlowDown} alt=""/>*/}
 					{/*<img id="EDIT" className={controlClassname} onClick={this.props.actionCallBack.bind(this,"EDIT")} src={Edit} alt=""/>*/}
 				</div>
 			</div>
