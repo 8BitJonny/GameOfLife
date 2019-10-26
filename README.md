@@ -7,6 +7,8 @@
         <img src="https://img.shields.io/github/license/8BitJonny/GameOfLife.svg" /></a>        
 
 # Game of Life
+Website: [https://8bitjonny.github.io/GameOfLife](https://8bitjonny.github.io/GameOfLife)
+
 Conveys Game of Life with a modern browser interface to play with.
 
 ## Links
