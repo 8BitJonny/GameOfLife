@@ -1,8 +1,4 @@
 import React from "react";
-import Play from "./svg/play";
-import Edit from "./svg/edit";
-import Pause from "./svg/pause";
-import Randomize from "./svg/randomize";
 import {ControlEvent} from "./model/controlEvent";
 import {State} from "./model/state";
 
@@ -28,21 +24,27 @@ class NavBar extends React.Component<ComponentsProps, ComponentsState> {
 		}
 	}
 
+	classesIfDisabled(controlEvent: ControlEvent, classes: string) {
+		if (this.shouldBeDisabled(controlEvent)) {
+			return classes
+		}
+	}
+
 	render () {
-		const controlClassname = "h-full ml-8 inline-block cursor-pointer text-white ";
+		const buttonClassname = "h-full mx-1 px-1 bg-transparent text-white font-bold border border-transparent rounded appearance-none focus:outline-none ";
 		return (
 			<div className="w-full h-12 flex-shrink-0 px-6 flex flex-wrap items-center justify-between bg-black">
 				<div>
 					<span className="text-white font-extrabold text-3xl">Game of Life</span>
 				</div>
-				<div id="controls" className="h-full py-3">
+				<div id="controls" className="h-full my-auto py-1 text-xl">
 					{ this.props.gridControlState === "PLAY" ? (
-						<Pause fillCurrentColor={true} className={controlClassname} onClick={this.handleClick.bind(this,"PAUSE")} />
+						<button className={buttonClassname} onClick={this.handleClick.bind(this,"PAUSE")}>Pause</button>
 					) : (
-						<Play fillCurrentColor={true} className={controlClassname} onClick={this.handleClick.bind(this,"PLAY")} />
+						<button className={buttonClassname} onClick={this.handleClick.bind(this,"PLAY")}>Play</button>
 					) }
-					<Randomize fillCurrentColor={true} className={controlClassname + (this.shouldBeDisabled("RAND")  ? " cursor-not-allowed" : " active:p-px")} onClick={this.handleClick.bind(this,"RAND")} />
-					<Edit fillCurrentColor={true} className={controlClassname + (this.shouldBeDisabled("EDIT")  ? " cursor-not-allowed" : " active:p-px")} onClick={this.handleClick.bind(this,"EDIT")} />
+					<button className={buttonClassname + " active:underline " + this.classesIfDisabled("RAND", "opacity-50 cursor-not-allowed")} onClick={this.handleClick.bind(this,"RAND")}>Randomize</button>
+					<button className={buttonClassname + " active:underline " + this.classesIfDisabled("EDIT", "opacity-50 cursor-not-allowed")} onClick={this.handleClick.bind(this,"EDIT")}>Edit</button>
 				</div>
 			</div>
 		);
