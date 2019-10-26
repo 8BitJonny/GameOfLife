@@ -31,7 +31,7 @@ class NavBar extends React.Component<ComponentsProps, ComponentsState> {
 	render () {
 		const controlClassname = "h-full ml-8 inline-block cursor-pointer text-white ";
 		return (
-			<div className="w-full h-12 px-6 flex flex-wrap items-center justify-between bg-black">
+			<div className="w-full h-12 flex-shrink-0 px-6 flex flex-wrap items-center justify-between bg-black">
 				<div>
 					<span className="text-white font-extrabold text-3xl">Game of Life</span>
 				</div>

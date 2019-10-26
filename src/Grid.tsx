@@ -29,9 +29,32 @@ class Grid extends React.Component<ComponentsProps, ComponentsState> {
 
 			this.setState({
 				size: {h, w},
-				gridState: this.generateEmptyState(h, w)
+				gridState: this.adjustGridToNewSize(this.state.gridState, h, w)
 			});
 		}
+	}
+
+	adjustGridToNewSize(grid: GridObject, newHeight: number, newWidth: number): GridObject {
+		const oldHeight = grid.length, oldWidth = grid[0].length;
+
+		for (let rowIndex = 0; rowIndex < oldHeight; rowIndex ++) {
+			grid[rowIndex] = this.truncateOrFillWith(newWidth, oldWidth, grid[rowIndex], 0);
+		}
+
+		grid = this.truncateOrFillWith(newHeight, oldHeight, grid ,this.generateEmptyColumn(newWidth));
+
+		return grid;
+	}
+
+	truncateOrFillWith<T>(newLength: number, oldLength: number, parent: T[], fillElement: T): T[] {
+		if (newLength < oldLength) {
+			parent = parent.splice(0, newLength);
+		} else {
+			for (let i = oldLength; i < newLength; i++) {
+				parent.push(fillElement)
+			}
+		}
+		return parent
 	}
 
 	componentDidMount(): void {
@@ -122,12 +145,17 @@ class Grid extends React.Component<ComponentsProps, ComponentsState> {
 	generateEmptyState(rowCount: number = this.state.size.h, columnCount: number = this.state.size.w ): GridObject {
 		let newState: GridObject = [];
 		for (let rowIndex = 0; rowIndex < rowCount; rowIndex ++) {
-			newState[rowIndex] = [];
-			for (let columnIndex = 0; columnIndex < columnCount; columnIndex ++) {
-				newState[rowIndex].push( 0 );
-			}
+			newState[rowIndex] = this.generateEmptyColumn(columnCount);
 		}
 		return newState;
+	}
+
+	generateEmptyColumn(columnSize: number): Alive[] {
+		let emptyColumn: Alive[] = [];
+		for (let columnIndex = 0; columnIndex < columnSize; columnIndex ++) {
+			emptyColumn.push( 0 );
+		}
+		return emptyColumn;
 	}
 
 	handleCellClick(e: React.SyntheticEvent, row: number, column: number) {
@@ -143,7 +171,7 @@ class Grid extends React.Component<ComponentsProps, ComponentsState> {
 
 	render () {
 		return (
-			<div className="bg-darkgreen flex-grow">
+			<div className="bg-darkgreen flex-grow flex-shrink overflow-hidden">
 				<div className="h-full p-2">
 					<div id="GridWrapper" className={"h-full flex justify-center content-center"}>
 						<GridLayout
