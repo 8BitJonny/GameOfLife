@@ -1,14 +1,10 @@
-import React, {CSSProperties} from 'react';
+import React, {CSSProperties, DragEvent} from 'react';
 import Cell from "./Cell";
 import Grid from "./model/grid";
 import remap from "./utils";
 
-interface ComponentsProps { gridState: Grid, cellSize: number, size: { h: number, w: number }, loadingAnimation: boolean }
+interface ComponentsProps { gridState: Grid, cellSize: number, size: { h: number, w: number }, animation?: "loadingIn" | "poppingIn", handleCellClick: (e:React.SyntheticEvent, row: number, column: number) => void }
 interface ComponentsState { }
-
-let loadingAnimation: CSSProperties = {
-	transition: "background-color 1s"
-};
 
 export default class GridLayout extends React.Component<ComponentsProps, ComponentsState> {
 	constructor(props: ComponentsProps) {
@@ -27,13 +23,24 @@ export default class GridLayout extends React.Component<ComponentsProps, Compone
 	createGrid() {
 		let grid = [];
 
-		let cellStyle = this.props.loadingAnimation ? loadingAnimation : {};
-
 		for (let i = 0; i < this.props.size.h; i++) {
 			let row = [];
 			for (let j = 0; j < this.props.size.w; j++) {
-				if (cellStyle.transition) cellStyle.transition = "background-color 1s ease " + remap(i+j, {min: 0, max: this.props.size.h+this.props.size.w}, {min: 0, max: 2}) + "s";
-				row.push(<Cell key={i-j} style={{margin: "0 3px", ...cellStyle}} alive={this.props.gridState[i][j]} />)
+				let cellStyle: CSSProperties = {};
+				if (this.props.animation) {
+					if (this.props.animation === "loadingIn") {
+						const delay = remap(i+j, {min: 0, max: this.props.size.h+this.props.size.w}, {min: 0, max: 2});
+						cellStyle.transition = "background-color 1s ease " + delay + "s"
+					} else if (this.props.animation === "poppingIn" && this.props.gridState[i][j]) {
+						cellStyle.animation = "popout 0.5s ease";
+					}
+				}
+				row.push(
+					<Cell key={i-j}
+					      alive={this.props.gridState[i][j]}
+					      style={{margin: "0 3px", ...cellStyle}}
+					      onClick={(e:React.SyntheticEvent) => {this.props.handleCellClick(e,i,j)}}/>
+				)
 			}
 			grid.push(<div key={i} className="row flex flex-1" style={{padding: "3px 0"}}>{row}</div>)
 		}
@@ -42,7 +49,10 @@ export default class GridLayout extends React.Component<ComponentsProps, Compone
 
 	render() {
 		return(
-			<div className={"flex flex-col"} style={{ width: this.props.size.w * this.props.cellSize, height: this.props.size.h * this.props.cellSize }}>
+			<div
+				className={"flex flex-col"}
+				style={{ width: this.props.size.w * this.props.cellSize, height: this.props.size.h * this.props.cellSize }}
+				onDragStart={(event: DragEvent<HTMLElement>) => {event.preventDefault()}} >
 				{this.createGrid()}
 			</div>
 		)

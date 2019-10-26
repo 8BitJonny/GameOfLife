@@ -1,1 +1,1 @@
-export type State = "PLAY" | "PAUSE";
+export type State = "PLAY" | "PAUSE" | "EDIT";

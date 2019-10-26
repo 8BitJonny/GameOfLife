@@ -5,7 +5,7 @@ import GridObject from "./model/grid";
 import Alive from "./model/alive";
 
 interface ComponentsProps {  }
-interface ComponentsState { play: boolean, cellSize: number, size: { h: number, w: number }, gridState: GridObject, loadingIn: boolean }
+interface ComponentsState { play: boolean, edit: boolean, cellSize: number, size: { h: number, w: number }, gridState: GridObject, animation: "loadingIn" | "poppingIn" | undefined }
 
 class Grid extends React.Component<ComponentsProps, ComponentsState> {
 	constructor(props: ComponentsProps) {
@@ -13,10 +13,11 @@ class Grid extends React.Component<ComponentsProps, ComponentsState> {
 
 		this.state = {
 			play: false,
+			edit: false,
 			cellSize: 20,
 			size: { h: 30, w: 60 },
 			gridState: this.generateEmptyState(30,60),
-			loadingIn: false
+			animation: undefined
 		}
 	}
 
@@ -28,8 +29,7 @@ class Grid extends React.Component<ComponentsProps, ComponentsState> {
 
 			this.setState({
 				size: {h, w},
-				gridState: this.generateEmptyState(h, w),
-				loadingIn: false
+				gridState: this.generateEmptyState(h, w)
 			});
 		}
 	}
@@ -43,13 +43,16 @@ class Grid extends React.Component<ComponentsProps, ComponentsState> {
 	handleControlEvent(event: ControlEvent) {
 		switch (event) {
 			case "PLAY":
-				if (!this.state.play) this.setState({play: true, loadingIn: false}, () => {this.handleNextState()});
+				if (!this.state.play) this.setState({play: true, animation: undefined, edit: false}, () => {this.handleNextState()});
 				return;
 			case "PAUSE":
 				this.setState({play: false});
 				return;
 			case "RAND":
-				this.setState({gridState: this.generateNewRandomState(), loadingIn: true});
+				this.setState({gridState: this.generateNewRandomState(), animation: "loadingIn"});
+				return;
+			case "EDIT":
+				this.setState({edit: true, animation: "poppingIn"});
 				return;
 			default:
 				return;
@@ -127,12 +130,28 @@ class Grid extends React.Component<ComponentsProps, ComponentsState> {
 		return newState;
 	}
 
+	handleCellClick(e: React.SyntheticEvent, row: number, column: number) {
+		if (!this.state.edit) return;
+		this.toggleCellStateAt(row, column)
+	}
+
+	toggleCellStateAt(row: number, column: number) {
+		let clonedGrid = [ ...this.state.gridState ];
+		clonedGrid[row][column] = clonedGrid[row][column] === 1 ? 0 : 1;
+		this.setState({ gridState: clonedGrid })
+	}
+
 	render () {
 		return (
 			<div className="bg-darkgreen flex-grow">
 				<div className="h-full p-2">
 					<div id="GridWrapper" className={"h-full flex justify-center content-center"}>
-						<GridLayout gridState={this.state.gridState} cellSize={this.state.cellSize} size={this.state.size} loadingAnimation={this.state.loadingIn}/>
+						<GridLayout
+							gridState={this.state.gridState}
+							cellSize={this.state.cellSize}
+							size={this.state.size}
+							animation={this.state.animation}
+							handleCellClick={this.handleCellClick.bind(this)}/>
 					</div>
 				</div>
 			</div>
