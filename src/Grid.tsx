@@ -20,7 +20,7 @@ class Grid extends React.Component<ComponentsProps, ComponentsState> {
 		}
 	}
 
-	componentDidMount(): void {
+	updateGridSize() {
 		const wrapperElement = document.getElementById("GridWrapper");
 		if (wrapperElement) {
 			const h =  Math.floor(wrapperElement.clientHeight / this.state.cellSize);
@@ -32,6 +32,12 @@ class Grid extends React.Component<ComponentsProps, ComponentsState> {
 				loadingIn: false
 			});
 		}
+	}
+
+	componentDidMount(): void {
+		this.updateGridSize();
+
+		window.addEventListener("resize", this.updateGridSize.bind(this));
 	}
 
 	handleControlEvent(event: ControlEvent) {
