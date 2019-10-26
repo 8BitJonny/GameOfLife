@@ -1,1 +1,1 @@
-export type ControlEvent = "PLAY" | "PAUSE" | "SLOW" | "FAST" | "RAND" | "EDIT";
+export type ControlEvent = "PLAY" | "PAUSE" | "SLOW" | "FAST" | "RAND" | "EDIT" | "CLEAR";

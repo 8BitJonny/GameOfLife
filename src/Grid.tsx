@@ -87,6 +87,9 @@ class Grid extends React.Component<ComponentsProps, ComponentsState> {
 					callback("EDIT");
 				}
 				return;
+			case "CLEAR":
+				this.setState({gridState: this.generateEmptyState(), animation: undefined});
+				return;
 			default:
 				return;
 		}
