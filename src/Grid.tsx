@@ -43,7 +43,7 @@ class Grid extends React.Component<ComponentsProps, ComponentsState> {
 	handleControlEvent(event: ControlEvent) {
 		switch (event) {
 			case "PLAY":
-				if (!this.state.play) this.setState({play: true, animation: undefined}, () => {this.handleNextState()});
+				if (!this.state.play) this.setState({play: true, animation: undefined, edit: false}, () => {this.handleNextState()});
 				return;
 			case "PAUSE":
 				this.setState({play: false});

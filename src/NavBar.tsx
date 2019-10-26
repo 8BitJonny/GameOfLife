@@ -21,13 +21,10 @@ class NavBar extends React.Component<ComponentsProps, ComponentsState> {
 	}
 
 	shouldBeDisabled(controlEvent: ControlEvent): boolean {
-		switch (this.props.gridControlState) {
-			case "PLAY":
-				return controlEvent === "RAND";
-			case "PAUSE":
-				return false;
-			default:
-				return false;
+		if (this.props.gridControlState === "PLAY") {
+			return controlEvent === "RAND" || controlEvent === "EDIT";
+		} else {
+			return false;
 		}
 	}
 
@@ -39,10 +36,10 @@ class NavBar extends React.Component<ComponentsProps, ComponentsState> {
 					<span className="text-white font-extrabold text-3xl">Game of Life</span>
 				</div>
 				<div id="controls" className="h-full py-3">
-					{ this.props.gridControlState === "PAUSE" ? (
-						<Play fillCurrentColor={true} className={controlClassname} onClick={this.handleClick.bind(this,"PLAY")} />
-					) : (
+					{ this.props.gridControlState === "PLAY" ? (
 						<Pause fillCurrentColor={true} className={controlClassname} onClick={this.handleClick.bind(this,"PAUSE")} />
+					) : (
+						<Play fillCurrentColor={true} className={controlClassname} onClick={this.handleClick.bind(this,"PLAY")} />
 					) }
 					<Randomize fillCurrentColor={true} className={controlClassname + (this.shouldBeDisabled("RAND")  ? " cursor-not-allowed" : " active:p-px")} onClick={this.handleClick.bind(this,"RAND")} />
 					<Edit fillCurrentColor={true} className={controlClassname + (this.shouldBeDisabled("EDIT")  ? " cursor-not-allowed" : " active:p-px")} onClick={this.handleClick.bind(this,"EDIT")} />
