@@ -37,6 +37,12 @@ code {
     color: #09d3ac;
 }
 
+@keyframes popout {
+    from{transform:scale(0)}
+    80%{transform:scale(1.2)}
+    to{transform:scale(1)}
+}
+
 @tailwind base;
 
 @tailwind components;

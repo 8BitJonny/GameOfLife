@@ -1,7 +1,8 @@
 import React from "react";
 import Play from "./svg/play";
-import Randomize from "./svg/randomize";
+import Edit from "./svg/edit";
 import Pause from "./svg/pause";
+import Randomize from "./svg/randomize";
 import {ControlEvent} from "./model/controlEvent";
 import {State} from "./model/state";
 
@@ -44,6 +45,7 @@ class NavBar extends React.Component<ComponentsProps, ComponentsState> {
 						<Pause fillCurrentColor={true} className={controlClassname} onClick={this.handleClick.bind(this,"PAUSE")} />
 					) }
 					<Randomize fillCurrentColor={true} className={controlClassname + (this.shouldBeDisabled("RAND")  ? " cursor-not-allowed" : " active:p-px")} onClick={this.handleClick.bind(this,"RAND")} />
+					<Edit fillCurrentColor={true} className={controlClassname + (this.shouldBeDisabled("EDIT")  ? " cursor-not-allowed" : " active:p-px")} onClick={this.handleClick.bind(this,"EDIT")} />
 				</div>
 			</div>
 		);
