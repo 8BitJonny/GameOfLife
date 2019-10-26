@@ -18,8 +18,9 @@ class App extends React.Component<ComponentsProps, ComponentsState> {
 
     messageToGrid(event: ControlEvent) {
         if (this.gridRef.current) {
-             if (event === "PLAY" || event === "PAUSE" || event === "EDIT") this.setState({ gridControlState: event });
-            this.gridRef.current.handleControlEvent(event)
+            this.gridRef.current.handleControlEvent(event, (state: ControlEvent) => {
+                if (state === "PLAY" || state === "PAUSE" || state === "EDIT") this.setState({ gridControlState: state });
+            })
         }
     }
 

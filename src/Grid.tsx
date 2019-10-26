@@ -63,19 +63,29 @@ class Grid extends React.Component<ComponentsProps, ComponentsState> {
 		window.addEventListener("resize", this.updateGridSize.bind(this));
 	}
 
-	handleControlEvent(event: ControlEvent) {
+	handleControlEvent(event: ControlEvent, callback: (state: ControlEvent) => void) {
 		switch (event) {
 			case "PLAY":
-				if (!this.state.play) this.setState({play: true, animation: undefined, edit: false}, () => {this.handleNextState()});
+				if (!this.state.play) {
+					this.setState({play: true, animation: undefined, edit: false}, () => {this.handleNextState()});
+					callback("PLAY");
+				}
 				return;
 			case "PAUSE":
 				this.setState({play: false});
+				callback("PAUSE");
 				return;
 			case "RAND":
 				this.setState({gridState: this.generateNewRandomState(), animation: "loadingIn"});
 				return;
 			case "EDIT":
-				this.setState({edit: true, animation: "poppingIn"});
+				if (this.state.edit) {
+					this.setState({edit: false, animation: undefined});
+					callback("PAUSE");
+				} else {
+					this.setState({edit: true, animation: "poppingIn"});
+					callback("EDIT");
+				}
 				return;
 			default:
 				return;
