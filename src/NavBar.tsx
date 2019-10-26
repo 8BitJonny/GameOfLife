@@ -1,7 +1,7 @@
 import React from "react";
-import Play from "./static/Play.svg";
-import Randomize from "./static/Randomize.svg";
-import Pause from "./static/Pause.svg";
+import Play from "./svg/play";
+import Randomize from "./svg/randomize";
+import Pause from "./svg/pause";
 import {ControlEvent} from "./model/controlEvent";
 import {State} from "./model/state";
 
@@ -31,7 +31,7 @@ class NavBar extends React.Component<ComponentsProps, ComponentsState> {
 	}
 
 	render () {
-		const controlClassname = "h-full ml-8 inline-block cursor-pointer";
+		const controlClassname = "h-full ml-8 inline-block cursor-pointer text-white ";
 		return (
 			<div className="w-full h-12 px-6 flex flex-wrap items-center justify-between bg-black">
 				<div>
@@ -39,14 +39,11 @@ class NavBar extends React.Component<ComponentsProps, ComponentsState> {
 				</div>
 				<div id="controls" className="h-full py-3">
 					{ this.props.gridControlState === "PAUSE" ? (
-						<img id="PLAY"  className={controlClassname + (this.shouldBeDisabled("PLAY")  ? " cursor-not-allowed" : "")} onClick={this.handleClick.bind(this,"PLAY")} src={Play} alt=""/>
+						<Play fillCurrentColor={true} className={controlClassname} onClick={this.handleClick.bind(this,"PLAY")} />
 					) : (
-						<img id="PAUSE" className={controlClassname + (this.shouldBeDisabled("PAUSE") ? " cursor-not-allowed" : "")} onClick={this.handleClick.bind(this,"PAUSE")} src={Pause} alt=""/>
+						<Pause fillCurrentColor={true} className={controlClassname} onClick={this.handleClick.bind(this,"PAUSE")} />
 					) }
-					<img id="RAND"  className={controlClassname + (this.shouldBeDisabled("RAND")  ? " cursor-not-allowed" : "")} onClick={this.handleClick.bind(this,"RAND")} src={Randomize} alt=""/>
-					{/*<img id="FAST" className={controlClassname} onClick={this.props.actionCallBack.bind(this,"FAST")} src={Faster} alt=""/>*/}
-					{/*<img id="SLOW" className={controlClassname} onClick={this.props.actionCallBack.bind(this,"SLOW")} src={SlowDown} alt=""/>*/}
-					{/*<img id="EDIT" className={controlClassname} onClick={this.props.actionCallBack.bind(this,"EDIT")} src={Edit} alt=""/>*/}
+					<Randomize fillCurrentColor={true} className={controlClassname + (this.shouldBeDisabled("RAND")  ? " cursor-not-allowed" : " active:p-px")} onClick={this.handleClick.bind(this,"RAND")} />
 				</div>
 			</div>
 		);
