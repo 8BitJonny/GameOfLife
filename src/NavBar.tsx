@@ -1,12 +1,11 @@
 import React from "react";
-import Play from "./static/Play.svg";
-import Randomize from "./static/Randomize.svg";
-import Pause from "./static/Pause.svg";
+import Play from "./svg/play";
+import Randomize from "./svg/randomize";
+import Pause from "./svg/pause";
 import {ControlEvent} from "./model/controlEvent";
+import {State} from "./model/state";
 
-const controlClassname = "h-full -mt-10 ml-8 inline-block cursor-pointer";
-
-interface ComponentsProps { actionCallBack: (event: ControlEvent) => void }
+interface ComponentsProps { gridControlState: State, actionCallBack: (event: ControlEvent) => void }
 interface ComponentsState { }
 
 class NavBar extends React.Component<ComponentsProps, ComponentsState> {
@@ -16,19 +15,35 @@ class NavBar extends React.Component<ComponentsProps, ComponentsState> {
 		this.state = { }
 	}
 
+	handleClick(controlEvent: ControlEvent) {
+		if (!this.shouldBeDisabled(controlEvent)) this.props.actionCallBack(controlEvent);
+	}
+
+	shouldBeDisabled(controlEvent: ControlEvent): boolean {
+		switch (this.props.gridControlState) {
+			case "PLAY":
+				return controlEvent === "RAND";
+			case "PAUSE":
+				return false;
+			default:
+				return false;
+		}
+	}
+
 	render () {
+		const controlClassname = "h-full ml-8 inline-block cursor-pointer text-white ";
 		return (
-			<div className="absolute flex items-center justify-between flex-wrap w-full h-20 bg-black px-6 py-1 text-white font-extrabold text-5xl">
+			<div className="w-full h-12 px-6 flex flex-wrap items-center justify-between bg-black">
 				<div>
-					<span>Game of Life</span>
+					<span className="text-white font-extrabold text-3xl">Game of Life</span>
 				</div>
-				<div id="controls" className="h-10">
-					{/*<img id="SLOW" className={controlClassname} onClick={this.props.actionCallBack.bind(this,"SLOW")} src={SlowDown} alt=""/>*/}
-					<img id="PLAY" className={controlClassname} onClick={this.props.actionCallBack.bind(this,"PLAY")} src={Play} alt=""/>
-					{/*<img id="FAST" className={controlClassname} onClick={this.props.actionCallBack.bind(this,"FAST")} src={Faster} alt=""/>*/}
-					<img id="PAUSE" className={controlClassname} onClick={this.props.actionCallBack.bind(this,"PAUSE")} src={Pause} alt=""/>
-					<img id="RAND" className={controlClassname} onClick={this.props.actionCallBack.bind(this,"RAND")} src={Randomize} alt=""/>
-					{/*<img id="EDIT" className={controlClassname} onClick={this.props.actionCallBack.bind(this,"EDIT")} src={Edit} alt=""/>*/}
+				<div id="controls" className="h-full py-3">
+					{ this.props.gridControlState === "PAUSE" ? (
+						<Play fillCurrentColor={true} className={controlClassname} onClick={this.handleClick.bind(this,"PLAY")} />
+					) : (
+						<Pause fillCurrentColor={true} className={controlClassname} onClick={this.handleClick.bind(this,"PAUSE")} />
+					) }
+					<Randomize fillCurrentColor={true} className={controlClassname + (this.shouldBeDisabled("RAND")  ? " cursor-not-allowed" : " active:p-px")} onClick={this.handleClick.bind(this,"RAND")} />
 				</div>
 			</div>
 		);

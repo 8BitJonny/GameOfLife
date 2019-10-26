@@ -459,7 +459,7 @@ module.exports = {
     order: ['responsive'],
     outline: ['responsive', 'focus'],
     overflow: ['responsive'],
-    padding: ['responsive'],
+    padding: ['responsive', 'active'],
     placeholderColor: ['responsive', 'focus'],
     pointerEvents: ['responsive'],
     position: ['responsive'],
@@ -480,4 +480,4 @@ module.exports = {
   },
   corePlugins: {},
   plugins: [],
-}
+};

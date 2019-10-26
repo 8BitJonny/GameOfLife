@@ -33,9 +33,9 @@ export default class GridLayout extends React.Component<ComponentsProps, Compone
 			let row = [];
 			for (let j = 0; j < this.props.size.w; j++) {
 				if (cellStyle.transition) cellStyle.transition = "background-color 1s ease " + remap(i+j, {min: 0, max: this.props.size.h+this.props.size.w}, {min: 0, max: 2}) + "s";
-				row.push(<Cell key={i-j} className="mx-1" style={{margin: "0 3px", ...cellStyle}} alive={this.props.gridState[i][j]} />)
+				row.push(<Cell key={i-j} style={{margin: "0 3px", ...cellStyle}} alive={this.props.gridState[i][j]} />)
 			}
-			grid.push(<div key={i} className="row flex flex-1 py-1" style={{padding: "3px 0"}}>{row}</div>)
+			grid.push(<div key={i} className="row flex flex-1" style={{padding: "3px 0"}}>{row}</div>)
 		}
 		return grid
 	}

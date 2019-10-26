@@ -13,14 +13,14 @@ class Grid extends React.Component<ComponentsProps, ComponentsState> {
 
 		this.state = {
 			play: false,
-			cellSize: 25,
+			cellSize: 20,
 			size: { h: 30, w: 60 },
 			gridState: this.generateEmptyState(30,60),
 			loadingIn: false
 		}
 	}
 
-	componentDidMount(): void {
+	updateGridSize() {
 		const wrapperElement = document.getElementById("GridWrapper");
 		if (wrapperElement) {
 			const h =  Math.floor(wrapperElement.clientHeight / this.state.cellSize);
@@ -32,6 +32,12 @@ class Grid extends React.Component<ComponentsProps, ComponentsState> {
 				loadingIn: false
 			});
 		}
+	}
+
+	componentDidMount(): void {
+		this.updateGridSize();
+
+		window.addEventListener("resize", this.updateGridSize.bind(this));
 	}
 
 	handleControlEvent(event: ControlEvent) {
@@ -123,7 +129,7 @@ class Grid extends React.Component<ComponentsProps, ComponentsState> {
 
 	render () {
 		return (
-			<div className="h-full pt-20 bg-darkgreen">
+			<div className="bg-darkgreen flex-grow">
 				<div className="h-full p-2">
 					<div id="GridWrapper" className={"h-full flex justify-center content-center"}>
 						<GridLayout gridState={this.state.gridState} cellSize={this.state.cellSize} size={this.state.size} loadingAnimation={this.state.loadingIn}/>
