@@ -1,6 +1,5 @@
 import Alive from "./model/alive";
 import Vector from "./model/vector";
-import Canvas from "./Canvas";
 
 export default class Cell {
 	size: number;
@@ -44,26 +43,20 @@ export default class Cell {
 			fillColor = "#bababa"
 		}
 
-		this._drawRoundRect(ctx, new Vector(xPos,yPos), new Vector(this.size,this.size), 5, fillColor);
+		this._drawRect(ctx, new Vector(xPos,yPos), new Vector(this.size,this.size), 5, fillColor);
 	}
 
-	_drawRect(ctx: CanvasRenderingContext2D, pos: Vector, size: Vector, fillColor: string) {
-		ctx.rect( pos.x, pos.y, size.x, size.y);
-		ctx.fillStyle = fillColor;
-		ctx.fill()
-	}
-
-	_drawRoundRect(ctx: CanvasRenderingContext2D, pos: Vector, size: Vector, radius: number = 5, fillColor: string) {
+	_drawRect(ctx: CanvasRenderingContext2D, pos: Vector, size: Vector, borderRadius: number = 5, fillColor: string) {
 		ctx.beginPath();
-		ctx.moveTo(pos.x + radius, pos.y);
-		ctx.lineTo(pos.x + size.x - radius, pos.y);
-		ctx.quadraticCurveTo(pos.x + size.x, pos.y, pos.x + size.x, pos.y + radius);
-		ctx.lineTo(pos.x + size.x, pos.y + size.y - radius);
-		ctx.quadraticCurveTo(pos.x + size.x, pos.y + size.y, pos.x + size.x - radius, pos.y + size.y);
-		ctx.lineTo(pos.x + radius, pos.y + size.y);
-		ctx.quadraticCurveTo(pos.x, pos.y + size.y, pos.x, pos.y + size.y - radius);
-		ctx.lineTo(pos.x, pos.y + radius);
-		ctx.quadraticCurveTo(pos.x, pos.y, pos.x + radius, pos.y);
+		ctx.moveTo(pos.x + borderRadius, pos.y);
+		ctx.lineTo(pos.x + size.x - borderRadius, pos.y);
+		ctx.quadraticCurveTo(pos.x + size.x, pos.y, pos.x + size.x, pos.y + borderRadius);
+		ctx.lineTo(pos.x + size.x, pos.y + size.y - borderRadius);
+		ctx.quadraticCurveTo(pos.x + size.x, pos.y + size.y, pos.x + size.x - borderRadius, pos.y + size.y);
+		ctx.lineTo(pos.x + borderRadius, pos.y + size.y);
+		ctx.quadraticCurveTo(pos.x, pos.y + size.y, pos.x, pos.y + size.y - borderRadius);
+		ctx.lineTo(pos.x, pos.y + borderRadius);
+		ctx.quadraticCurveTo(pos.x, pos.y, pos.x + borderRadius, pos.y);
 		ctx.closePath();
 
 		ctx.fillStyle = fillColor;
