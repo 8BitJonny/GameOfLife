@@ -32,7 +32,7 @@ it("forwards event messages from navbar to grid", () => {
 		render(<App />, container);
 	});
 
-	const buttonIds = ["PAUSE", "PLAY"];
+	const buttonIds = ["PLAY"];
 
 	const buttons = buttonIds.map((id: string) => {return container!.querySelector("[id=" + id + "]")});
 

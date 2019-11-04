@@ -37,9 +37,9 @@ class NavBar extends React.Component<ComponentsProps, ComponentsState> {
 				</div>
 				<div id="controls" className="h-full my-auto py-1 text-xl">
 					{ this.props.gridControlState === "PLAY" ? (
-						<button className={buttonClassname} onClick={this.handleClick.bind(this,"PAUSE")}>Pause</button>
+						<button id="PAUSE" className={buttonClassname} onClick={this.handleClick.bind(this,"PAUSE")}>Pause</button>
 					) : (
-						<button className={buttonClassname} onClick={this.handleClick.bind(this,"PLAY")}>Play</button>
+						<button id="PLAY" className={buttonClassname} onClick={this.handleClick.bind(this,"PLAY")}>Play</button>
 					) }
 					<button className={buttonClassname + " active:underline" + this.classesIf(this.shouldBeDisabled("RAND"), " opacity-50 cursor-not-allowed")} onClick={this.handleClick.bind(this,"RAND")}>Randomize</button>
 					<button className={buttonClassname + " active:underline" + this.classesIf(this.props.gridControlState === "EDIT", " underline") + this.classesIf(this.shouldBeDisabled("EDIT"), " opacity-50 cursor-not-allowed")} onClick={this.handleClick.bind(this,"EDIT")}>Edit</button>
