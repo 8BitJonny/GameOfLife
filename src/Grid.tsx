@@ -4,6 +4,7 @@ import GridObject from "./model/grid";
 import Canvas from "./Canvas";
 import CanvasCell from "./CanvasCell";
 import GridConfig from "./model/gridConfig";
+import {calculateCellCountFromPixelSize, calculatePixelSizeFromCellCount} from "./utils";
 
 interface ComponentsProps {  }
 interface ComponentsState { play: boolean, edit: boolean, gridConfig: GridConfig, gridState: GridObject, animation: "loadingIn" | "poppingIn" | undefined }
@@ -27,16 +28,13 @@ class Grid extends React.Component<ComponentsProps, ComponentsState> {
 	}
 
 	updateGridSize() {
-		function calculateCount(cellSize: number, cellPadding: number, pixelSize: number) {return Math.floor((pixelSize + cellPadding) / (cellSize + cellPadding))}
-
 		const wrapperElement = document.getElementById("GridWrapper");
 		if (wrapperElement) {
-			const h = calculateCount(this.state.gridConfig.cellSize, this.state.gridConfig.cellPadding, wrapperElement.clientHeight);
-			const w = calculateCount(this.state.gridConfig.cellSize, this.state.gridConfig.cellPadding, wrapperElement.clientWidth);
+			const h = calculateCellCountFromPixelSize(this.state.gridConfig.cellSize, this.state.gridConfig.cellPadding, wrapperElement.clientHeight);
+			const w = calculateCellCountFromPixelSize(this.state.gridConfig.cellSize, this.state.gridConfig.cellPadding, wrapperElement.clientWidth);
 
-			const pixelH = h * this.state.gridConfig.cellSize + (h-1) * this.state.gridConfig.cellPadding;
-			const pixelW = w * this.state.gridConfig.cellSize + (w-1) * this.state.gridConfig.cellPadding;
-			console.log("w: ", w, " h: ",h);
+			const pixelH = calculatePixelSizeFromCellCount(this.state.gridConfig.cellSize, this.state.gridConfig.cellPadding, h);
+			const pixelW = calculatePixelSizeFromCellCount(this.state.gridConfig.cellSize, this.state.gridConfig.cellPadding, w);
 
 			this.setState( {
 				gridConfig: {...this.state.gridConfig, size: {h: pixelH, w: pixelW}, cellCount: {h, w}},
