@@ -1,8 +1,8 @@
 import React from "react";
-import GridLayout from "./GridLayout";
 import {ControlEvent} from "./model/controlEvent";
 import GridObject from "./model/grid";
-import Alive from "./model/alive";
+import Canvas from "./Canvas";
+import CanvasCell from "./CanvasCell";
 
 interface ComponentsProps {  }
 interface ComponentsState { play: boolean, edit: boolean, cellSize: number, size: { h: number, w: number }, gridState: GridObject, animation: "loadingIn" | "poppingIn" | undefined }
@@ -38,20 +38,20 @@ class Grid extends React.Component<ComponentsProps, ComponentsState> {
 		const oldHeight = grid.length, oldWidth = grid[0].length;
 
 		for (let rowIndex = 0; rowIndex < oldHeight; rowIndex ++) {
-			grid[rowIndex] = this.truncateOrFillWith(newWidth, oldWidth, grid[rowIndex], 0);
+			grid[rowIndex] = this.truncateOrFillWith(newWidth, oldWidth, grid[rowIndex],(index) => new CanvasCell(rowIndex, index));
 		}
 
-		grid = this.truncateOrFillWith(newHeight, oldHeight, grid ,this.generateEmptyColumn(newWidth));
+		grid = this.truncateOrFillWith(newHeight, oldHeight, grid ,(index) => this.generateEmptyColumn(index, newWidth));
 
 		return grid;
 	}
 
-	truncateOrFillWith<T>(newLength: number, oldLength: number, parent: T[], fillElement: T): T[] {
+	truncateOrFillWith<T>(newLength: number, oldLength: number, parent: T[], fillElement: (index: number) => T): T[] {
 		if (newLength < oldLength) {
 			parent = parent.splice(0, newLength);
 		} else {
 			for (let i = oldLength; i < newLength; i++) {
-				parent.push(fillElement)
+				parent.push(fillElement(i))
 			}
 		}
 		return parent
@@ -100,21 +100,23 @@ class Grid extends React.Component<ComponentsProps, ComponentsState> {
 
 		this.setState({gridState: this.calculateNextGrid( this.state.gridState )});
 
-		setTimeout(() => {this.handleNextState()}, 150)
+		requestAnimationFrame(this.handleNextState.bind(this));
 	}
 
 	calculateNextGrid(grid: GridObject, rowCount: number = this.state.size.h, columnCount: number = this.state.size.w): GridObject {
-		let newGridState: GridObject = [];
 		for (let rowIndex = 0; rowIndex < rowCount; rowIndex ++) {
-			newGridState[rowIndex] = [];
 			for (let columnIndex = 0; columnIndex < columnCount; columnIndex ++) {
 				const aliveNeighbours = this.countAliveNeighbours(grid, {rowIndex, columnIndex});
-				const oldCellState = grid[rowIndex][columnIndex];
-				const newCellState = this.calculateCellState(aliveNeighbours, oldCellState);
-				newGridState[rowIndex].push( newCellState );
+				grid[rowIndex][columnIndex].nextCellState(aliveNeighbours);
 			}
 		}
-		return newGridState
+
+		for (let rowIndex = 0; rowIndex < rowCount; rowIndex ++) {
+			for (let columnIndex = 0; columnIndex < columnCount; columnIndex ++) {
+				grid[rowIndex][columnIndex].applyNextState();
+			}
+		}
+		return grid
 	}
 
 	countAliveNeighbours(grid: GridObject, cellIndex: { rowIndex: number, columnIndex: number }): number {
@@ -125,7 +127,9 @@ class Grid extends React.Component<ComponentsProps, ComponentsState> {
 				const columnIndex = cellIndex.columnIndex + gridColumnIndexOffset;
 				if (this.indexInGridBounds(grid, {rowIndex, columnIndex})
 				&& !(gridColumnIndexOffset === 0 && gridRowIndexOffset === 0)) {
-					count += grid[rowIndex][columnIndex] ? 1 : 0;
+					if (grid[rowIndex][columnIndex].alive === 1) {
+						count ++
+					}
 				}
 			}
 		}
@@ -136,20 +140,12 @@ class Grid extends React.Component<ComponentsProps, ComponentsState> {
 		return cellIndex.rowIndex >= 0 && cellIndex.rowIndex < grid.length && cellIndex.columnIndex >= 0 && cellIndex.columnIndex < grid[0].length;
 	}
 
-	calculateCellState(aliveNeighbours: number, oldState: Alive): Alive {
-		if (oldState) {
-			return (aliveNeighbours === 2 || aliveNeighbours === 3) ? 1 : 0;
-		} else {
-			return aliveNeighbours === 3 ? 1 : 0;
-		}
-	}
-
 	generateNewRandomState(rowCount: number = this.state.size.h, columnCount: number = this.state.size.w ): GridObject {
 		let newState: GridObject = [];
 		for (let rowIndex = 0; rowIndex < rowCount; rowIndex ++) {
 			newState[rowIndex] = [];
 			for (let columnIndex = 0; columnIndex < columnCount; columnIndex ++) {
-				newState[rowIndex].push( Math.random() > 0.7 ? 1 : 0 );
+				newState[rowIndex].push( new CanvasCell(columnIndex, rowIndex, Math.random() > 0.7 ? 1 : 0) );
 			}
 		}
 		return newState;
@@ -158,15 +154,15 @@ class Grid extends React.Component<ComponentsProps, ComponentsState> {
 	generateEmptyState(rowCount: number = this.state.size.h, columnCount: number = this.state.size.w ): GridObject {
 		let newState: GridObject = [];
 		for (let rowIndex = 0; rowIndex < rowCount; rowIndex ++) {
-			newState[rowIndex] = this.generateEmptyColumn(columnCount);
+			newState[rowIndex] = this.generateEmptyColumn(rowIndex, columnCount);
 		}
 		return newState;
 	}
 
-	generateEmptyColumn(columnSize: number): Alive[] {
-		let emptyColumn: Alive[] = [];
-		for (let columnIndex = 0; columnIndex < columnSize; columnIndex ++) {
-			emptyColumn.push( 0 );
+	generateEmptyColumn(rowIndex: number, size: number): CanvasCell[] {
+		let emptyColumn: CanvasCell[] = [];
+		for (let columnIndex = 0; columnIndex < size; columnIndex ++) {
+			emptyColumn.push( new CanvasCell(columnIndex, rowIndex) );
 		}
 		return emptyColumn;
 	}
@@ -178,7 +174,7 @@ class Grid extends React.Component<ComponentsProps, ComponentsState> {
 
 	toggleCellStateAt(row: number, column: number) {
 		let clonedGrid = [ ...this.state.gridState ];
-		clonedGrid[row][column] = clonedGrid[row][column] === 1 ? 0 : 1;
+		clonedGrid[row][column].toggle();
 		this.setState({ gridState: clonedGrid })
 	}
 
@@ -187,7 +183,7 @@ class Grid extends React.Component<ComponentsProps, ComponentsState> {
 			<div className="bg-darkgreen flex-grow flex-shrink overflow-hidden">
 				<div className="h-full p-2">
 					<div id="GridWrapper" className={"h-full flex justify-center content-center"}>
-						<GridLayout
+						<Canvas
 							gridState={this.state.gridState}
 							cellSize={this.state.cellSize}
 							size={this.state.size}

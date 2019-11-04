@@ -1,7 +1,7 @@
-import Alive from "./alive";
+import CanvasCell from "../CanvasCell";
 
-interface Grid extends Array<Array<Alive>> {
-	[index: number]: Alive[];
+interface Grid extends Array<Array<CanvasCell>> {
+	[index: number]: CanvasCell[];
 }
 
 export default Grid;
