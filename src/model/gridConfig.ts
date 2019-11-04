@@ -7,6 +7,7 @@ export default interface GridConfig {
 		w: number,
 		h: number
 	},
+	speed: number,
 	cellSize: number,
 	cellPadding: number
 }

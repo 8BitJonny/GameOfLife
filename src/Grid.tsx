@@ -16,6 +16,7 @@ class GridComponent extends React.Component<ComponentsProps, ComponentsState> {
 			play: false,
 			edit: false,
 			gridConfig: {
+				speed: 150,
 				cellSize: 14,
 				cellPadding: 7,
 				size: { h: 623, w: 1253 },
@@ -80,12 +81,15 @@ class GridComponent extends React.Component<ComponentsProps, ComponentsState> {
 		}
 	}
 
-	handleNextState() {
+	handleNextState(nextStepTime: number = 0) {
 		if (!this.state.play) return;
 
-		this.setState({gridState: this.state.gridState.calculateNextGrid()});
+		if (new Date().getTime() >= nextStepTime) {
+			nextStepTime = new Date().getTime() + this.state.gridConfig.speed;
+			this.setState({gridState: this.state.gridState.calculateNextGrid()});
+		}
 
-		requestAnimationFrame(this.handleNextState.bind(this));
+		requestAnimationFrame(this.handleNextState.bind(this, nextStepTime));
 	}
 
 	render () {
