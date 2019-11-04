@@ -3,9 +3,10 @@ import {ControlEvent} from "./model/controlEvent";
 import GridObject from "./model/grid";
 import Canvas from "./Canvas";
 import CanvasCell from "./CanvasCell";
+import GridConfig from "./model/gridConfig";
 
 interface ComponentsProps {  }
-interface ComponentsState { play: boolean, edit: boolean, cellSize: number, size: { h: number, w: number }, gridState: GridObject, animation: "loadingIn" | "poppingIn" | undefined }
+interface ComponentsState { play: boolean, edit: boolean, gridConfig: GridConfig, gridState: GridObject, animation: "loadingIn" | "poppingIn" | undefined }
 
 class Grid extends React.Component<ComponentsProps, ComponentsState> {
 	constructor(props: ComponentsProps) {
@@ -14,8 +15,11 @@ class Grid extends React.Component<ComponentsProps, ComponentsState> {
 		this.state = {
 			play: false,
 			edit: false,
-			cellSize: 20,
-			size: { h: 30, w: 60 },
+			gridConfig: {
+				cellSize: 20,
+				cellPadding: 7,
+				size: { h: 30, w: 60 }
+			},
 			gridState: this.generateEmptyState(30,60),
 			animation: undefined
 		}
@@ -24,11 +28,11 @@ class Grid extends React.Component<ComponentsProps, ComponentsState> {
 	updateGridSize() {
 		const wrapperElement = document.getElementById("GridWrapper");
 		if (wrapperElement) {
-			const h =  Math.floor(wrapperElement.clientHeight / this.state.cellSize);
-			const w = Math.floor(wrapperElement.clientWidth / this.state.cellSize);
+			const h =  Math.floor(wrapperElement.clientHeight / this.state.gridConfig.cellSize);
+			const w = Math.floor(wrapperElement.clientWidth / this.state.gridConfig.cellSize);
 
-			this.setState({
-				size: {h, w},
+			this.setState( {
+				gridConfig: {...this.state.gridConfig, size: {h, w}},
 				gridState: this.adjustGridToNewSize(this.state.gridState, h, w)
 			});
 		}
@@ -103,7 +107,7 @@ class Grid extends React.Component<ComponentsProps, ComponentsState> {
 		requestAnimationFrame(this.handleNextState.bind(this));
 	}
 
-	calculateNextGrid(grid: GridObject, rowCount: number = this.state.size.h, columnCount: number = this.state.size.w): GridObject {
+	calculateNextGrid(grid: GridObject, rowCount: number = this.state.gridConfig.size.h, columnCount: number = this.state.gridConfig.size.w): GridObject {
 		for (let rowIndex = 0; rowIndex < rowCount; rowIndex ++) {
 			for (let columnIndex = 0; columnIndex < columnCount; columnIndex ++) {
 				const aliveNeighbours = this.countAliveNeighbours(grid, {rowIndex, columnIndex});
@@ -140,7 +144,7 @@ class Grid extends React.Component<ComponentsProps, ComponentsState> {
 		return cellIndex.rowIndex >= 0 && cellIndex.rowIndex < grid.length && cellIndex.columnIndex >= 0 && cellIndex.columnIndex < grid[0].length;
 	}
 
-	generateNewRandomState(rowCount: number = this.state.size.h, columnCount: number = this.state.size.w ): GridObject {
+	generateNewRandomState(rowCount: number = this.state.gridConfig.size.h, columnCount: number = this.state.gridConfig.size.w ): GridObject {
 		let newState: GridObject = [];
 		for (let rowIndex = 0; rowIndex < rowCount; rowIndex ++) {
 			newState[rowIndex] = [];
@@ -151,7 +155,7 @@ class Grid extends React.Component<ComponentsProps, ComponentsState> {
 		return newState;
 	}
 
-	generateEmptyState(rowCount: number = this.state.size.h, columnCount: number = this.state.size.w ): GridObject {
+	generateEmptyState(rowCount: number = this.state.gridConfig.size.h, columnCount: number = this.state.gridConfig.size.w ): GridObject {
 		let newState: GridObject = [];
 		for (let rowIndex = 0; rowIndex < rowCount; rowIndex ++) {
 			newState[rowIndex] = this.generateEmptyColumn(rowIndex, columnCount);
@@ -185,8 +189,7 @@ class Grid extends React.Component<ComponentsProps, ComponentsState> {
 					<div id="GridWrapper" className={"h-full flex justify-center content-center"}>
 						<Canvas
 							gridState={this.state.gridState}
-							cellSize={this.state.cellSize}
-							size={this.state.size}
+							gridConfig={this.state.gridConfig}
 							animation={this.state.animation}
 							handleCellClick={this.handleCellClick.bind(this)}/>
 					</div>

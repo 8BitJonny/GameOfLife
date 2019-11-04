@@ -1,7 +1,8 @@
 import React from 'react';
 import Grid from "./model/grid";
+import GridConfig from "./model/gridConfig";
 
-interface ComponentsProps { gridState: Grid, cellSize: number, size: { h: number, w: number }, animation?: "loadingIn" | "poppingIn", handleCellClick: (e:React.SyntheticEvent, row: number, column: number) => void }
+interface ComponentsProps { gridState: Grid, gridConfig: GridConfig, animation?: "loadingIn" | "poppingIn", handleCellClick: (e:React.SyntheticEvent, row: number, column: number) => void }
 interface ComponentsState { ctx: CanvasRenderingContext2D | undefined }
 
 export default class Canvas extends React.Component<ComponentsProps, ComponentsState> {
@@ -35,7 +36,7 @@ export default class Canvas extends React.Component<ComponentsProps, ComponentsS
 
 	clearCanvas() {
 		if (!this.state.ctx) return;
-		this.state.ctx.clearRect(0,0, this.props.size.w * this.props.cellSize, this.props.size.h * this.props.cellSize);
+		this.state.ctx.clearRect(0,0, this.props.gridConfig.size.w * this.props.gridConfig.cellSize, this.props.gridConfig.size.h * this.props.gridConfig.cellSize);
 	}
 
 	drawCanvas() {
@@ -43,8 +44,8 @@ export default class Canvas extends React.Component<ComponentsProps, ComponentsS
 
 		const cellPadding = 7;
 
-		for (let i = 0; i < this.props.size.h; i++) {
-			for (let j = 0; j < this.props.size.w; j++) {
+		for (let i = 0; i < this.props.gridConfig.size.h; i++) {
+			for (let j = 0; j < this.props.gridConfig.size.w; j++) {
 				this.props.gridState[i][j].draw(this.state.ctx, cellPadding);
 			}
 		}
@@ -58,8 +59,8 @@ export default class Canvas extends React.Component<ComponentsProps, ComponentsS
 			<canvas
 				id="canvas"
 				className={""}
-				width={this.props.size.w * this.props.cellSize}
-				height={this.props.size.h * this.props.cellSize}>
+				width={this.props.gridConfig.size.w * this.props.gridConfig.cellSize}
+				height={this.props.gridConfig.size.h * this.props.gridConfig.cellSize}>
 
 			</canvas>
 		)
