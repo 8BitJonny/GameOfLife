@@ -2,11 +2,12 @@ import React from 'react';
 import Grid from '../Grid';
 import Alive from "../model/alive";
 import GridObject from "../model/grid";
+import CanvasCell from "../CanvasCell";
 
 it("generates a new grid with the required size", () => {
 	const newGridState = Grid.prototype.generateNewRandomState(10,12);
 	expect(newGridState).toHaveLength(10);
-	newGridState.forEach((row: Alive[]) => { expect(row).toHaveLength(12) })
+	newGridState.forEach((row: CanvasCell[]) => { expect(row).toHaveLength(12) })
 });
 
 it("calculates new cell state correctly", () => {
@@ -25,14 +26,16 @@ it("calculates new cell state correctly", () => {
 	];
 
 	testCases.forEach(testCase => {
-		const calculatedCellState = Grid.prototype.calculateCellState(testCase.aliveNeighbours, testCase.currentState);
+		let cell = new CanvasCell(0,0,testCase.currentState);
+		cell.nextCellState(testCase.aliveNeighbours);
+		cell.applyNextState();
 
-		expect(calculatedCellState).toBe(testCase.result);
+		expect(cell.alive).toBe(testCase.result);
 	});
 });
 
 it("checks correctly if cellIndex is in Grid", () => {
-	const grid: GridObject = [ [0 , 0, 0], [0 , 0, 0], [0 , 0, 0] ];
+	const grid: GridObject = Grid.prototype.generateEmptyState(3,3);
 
 	[
 		{ rowIndex:  0, columnIndex:  0, expectedResult: true  },
@@ -49,11 +52,11 @@ it("checks correctly if cellIndex is in Grid", () => {
 });
 
 it("counts the alive numbers correctly", () => {
-	const grid: GridObject = [
+	const grid: GridObject = generateGridFromList([
 		[0, 1, 0],
 		[1, 0, 0],
 		[1, 1, 0],
-		[0, 0, 1] ];
+		[0, 0, 1] ]);
 
 	[
 		{ rowIndex:  0, columnIndex:  0, expectedResult: 2 },
@@ -63,56 +66,56 @@ it("counts the alive numbers correctly", () => {
 		{ rowIndex:  3, columnIndex:  1, expectedResult: 3 },
 		{ rowIndex:  1, columnIndex:  2, expectedResult: 2 }
 	].forEach(testCase => {
-		const isIndexInBounds = Grid.prototype.countAliveNeighbours(grid, {rowIndex: testCase.rowIndex, columnIndex: testCase.columnIndex});
+		const aliveNeighbours = Grid.prototype.countAliveNeighbours(grid, {rowIndex: testCase.rowIndex, columnIndex: testCase.columnIndex});
 
-		expect(isIndexInBounds).toBe(testCase.expectedResult);
+		expect(aliveNeighbours).toBe(testCase.expectedResult);
 	});
 });
 
 it("calculates new grid state correctly", () => {
 	const testCases: { baseGrid: GridObject, expectedNextGrid: GridObject }[] = [
-		{   baseGrid:  [
+		{   baseGrid:  generateGridFromList([
 				[1, 1, 0, 0, 0],
 				[0, 0, 0, 1, 0],
 				[0, 1, 1, 0, 0],
 				[0, 0, 0, 1, 0],
 				[0, 1, 1, 1, 0]
-	        ],
-			expectedNextGrid: [
+	        ]),
+			expectedNextGrid: generateGridFromList([
 				[0, 0, 0, 0, 0],
 				[1, 0, 0, 0, 0],
 				[0, 0, 1, 1, 0],
 				[0, 0, 0, 1, 0],
 				[0, 0, 1, 1, 0]
-			]
-		},{ baseGrid:  [
+			])
+		},{ baseGrid: generateGridFromList([
 				[1, 1, 0, 0, 1],
 				[0, 0, 0, 0, 0],
 				[1, 0, 0, 1, 0],
 				[0, 0, 1, 0, 0],
 				[1, 0, 0, 0, 1]
-			],
-			expectedNextGrid:  [
+			]),
+			expectedNextGrid:  generateGridFromList([
 				[0, 0, 0, 0, 0],
 				[1, 1, 0, 0, 0],
 				[0, 0, 0, 0, 0],
 				[0, 1, 0, 1, 0],
 				[0, 0, 0, 0, 0]
-			]
-		},{ baseGrid:  [
+			])
+		},{ baseGrid: generateGridFromList([
 				[1, 0, 1, 0, 0],
 				[0, 1, 0, 0, 1],
 				[0, 1, 0, 1, 0],
 				[0, 0, 1, 0, 1],
 				[1, 0, 0, 1, 0]
-			],
-			expectedNextGrid:  [
+			]),
+			expectedNextGrid:  generateGridFromList([
 				[0, 1, 0, 0, 0],
 				[1, 1, 0, 1, 0],
 				[0, 1, 0, 1, 1],
 				[0, 1, 1, 0, 1],
 				[0, 0, 0, 1, 0]
-			]
+			])
 		}
 	];
 
@@ -122,3 +125,14 @@ it("calculates new grid state correctly", () => {
 		expect(nextGrid).toStrictEqual(testCase.expectedNextGrid);
 	});
 });
+
+function generateGridFromList(list: Alive[][]) {
+	let grid = Grid.prototype.generateEmptyState(list.length, list[0].length);
+
+	for (let i=0; i < list.length; i++) {
+		for (let j=0; j < list[i].length; j++) {
+			grid[i][j].alive = list[i][j];
+		}
+	}
+	return grid;
+}
