@@ -36,17 +36,15 @@ export default class Canvas extends React.Component<ComponentsProps, ComponentsS
 
 	clearCanvas() {
 		if (!this.state.ctx) return;
-		this.state.ctx.clearRect(0,0, this.props.gridConfig.size.w * this.props.gridConfig.cellSize, this.props.gridConfig.size.h * this.props.gridConfig.cellSize);
+		this.state.ctx.clearRect(0,0, this.props.gridConfig.size.w, this.props.gridConfig.size.h);
 	}
 
 	drawCanvas() {
 		if (!this.state.ctx) return;
 
-		const cellPadding = 7;
-
-		for (let i = 0; i < this.props.gridConfig.size.h; i++) {
-			for (let j = 0; j < this.props.gridConfig.size.w; j++) {
-				this.props.gridState[i][j].draw(this.state.ctx, cellPadding);
+		for (let i = 0; i < this.props.gridConfig.cellCount.h; i++) {
+			for (let j = 0; j < this.props.gridConfig.cellCount.w; j++) {
+				this.props.gridState[i][j].draw(this.state.ctx, this.props.gridConfig.cellSize, this.props.gridConfig.cellPadding);
 			}
 		}
 	}
@@ -59,8 +57,8 @@ export default class Canvas extends React.Component<ComponentsProps, ComponentsS
 			<canvas
 				id="canvas"
 				className={""}
-				width={this.props.gridConfig.size.w * this.props.gridConfig.cellSize}
-				height={this.props.gridConfig.size.h * this.props.gridConfig.cellSize}>
+				width={this.props.gridConfig.size.w}
+				height={this.props.gridConfig.size.h}>
 
 			</canvas>
 		)

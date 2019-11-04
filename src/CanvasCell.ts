@@ -2,12 +2,10 @@ import Alive from "./model/alive";
 import Vector from "./model/vector";
 
 export default class Cell {
-	size: number;
 	alive: Alive;
 	nextAliveState: Alive | undefined;
 	index: {x: number, y: number};
-	constructor(x: number, y: number, alive: Alive = 0, size = 14) {
-		this.size = size;
+	constructor(x: number, y: number, alive: Alive = 0) {
 		this.alive = alive;
 		this.nextAliveState = undefined;
 		this.index = {x: x, y: y}
@@ -32,18 +30,18 @@ export default class Cell {
 		this.alive = this.alive ? 0 : 1;
 	}
 
-	draw(ctx: CanvasRenderingContext2D, cellPadding: number) {
+	draw(ctx: CanvasRenderingContext2D, size:number, cellPadding: number) {
 		ctx.beginPath();
 
-		let xPos = this.size * this.index.x + this.index.x*cellPadding;
-		let yPos = this.size * this.index.y + this.index.y*cellPadding;
+		let xPos = (size + cellPadding) * this.index.x;
+		let yPos = (size + cellPadding) * this.index.y;
 		let fillColor = "#1b331d";
 
 		if (this.alive === 1) {
 			fillColor = "#bababa"
 		}
 
-		this._drawRect(ctx, new Vector(xPos,yPos), new Vector(this.size,this.size), 5, fillColor);
+		this._drawRect(ctx, new Vector(xPos,yPos), new Vector(size,size), 5, fillColor);
 	}
 
 	_drawRect(ctx: CanvasRenderingContext2D, pos: Vector, size: Vector, borderRadius: number = 5, fillColor: string) {
