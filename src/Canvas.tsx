@@ -1,8 +1,8 @@
 import React from 'react';
-import Grid from "./model/grid";
+import {GridState} from "./model/grid";
 import GridConfig from "./model/gridConfig";
 
-interface ComponentsProps { gridState: Grid, gridConfig: GridConfig, animation?: "loadingIn" | "poppingIn", handleCellClick: (e:React.SyntheticEvent, row: number, column: number) => void }
+interface ComponentsProps { gridState: GridState, gridConfig: GridConfig, animation?: "loadingIn" | "poppingIn" }
 interface ComponentsState { ctx: CanvasRenderingContext2D | undefined }
 
 export default class Canvas extends React.Component<ComponentsProps, ComponentsState> {
