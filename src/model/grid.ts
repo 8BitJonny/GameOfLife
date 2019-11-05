@@ -80,7 +80,7 @@ export default class Grid {
 		const oldHeight = this.state.length, oldWidth = this.state[0].length;
 
 		for (let rowIndex = 0; rowIndex < oldHeight; rowIndex ++) {
-			this.state[rowIndex] = Grid.truncateOrFillWith(newWidth, oldWidth, this.state[rowIndex],(index) => new CanvasCell(rowIndex, index));
+			this.state[rowIndex] = Grid.truncateOrFillWith(newWidth, oldWidth, this.state[rowIndex],(index) => {return new CanvasCell(index, rowIndex)});
 		}
 
 		this.state = Grid.truncateOrFillWith(newHeight, oldHeight, this.state ,(index) => Grid.generateEmptyColumn(index, newWidth));
@@ -93,7 +93,7 @@ export default class Grid {
 			parent = parent.splice(0, newLength);
 		} else {
 			for (let i = oldLength; i < newLength; i++) {
-				parent.push(fillElement(i))
+				parent.push(fillElement(i));
 			}
 		}
 		return parent

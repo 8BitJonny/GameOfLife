@@ -20,6 +20,11 @@ export default class Canvas extends React.Component<ComponentsProps, ComponentsS
 		});
 	}
 
+	componentDidUpdate() {
+		this.clearCanvas();
+		this.drawCanvas();
+	}
+
 	setupCanvas(cb?: () => void) {
 		let canvas = document.getElementById('canvas') as HTMLCanvasElement;
 		if (!canvas) return;
@@ -50,9 +55,6 @@ export default class Canvas extends React.Component<ComponentsProps, ComponentsS
 	}
 
 	render() {
-		this.clearCanvas();
-		this.drawCanvas();
-
 		return(
 			<canvas
 				id="canvas"
