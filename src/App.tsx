@@ -1,6 +1,6 @@
 import React, {createRef} from 'react';
 import NavBar from "./NavBar";
-import Grid from "./Grid";
+import Grid from "./GridComponent";
 import {ControlEvent} from "./model/controlEvent";
 import {State} from "./model/state";
 
