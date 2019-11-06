@@ -26,8 +26,8 @@ export default class Cell {
 		}
 	}
 
-	toggle() {
-		this.alive = this.alive ? 0 : 1;
+	toggle(state: boolean) {
+		this.alive = state ? 1 : 0;
 	}
 
 	draw(ctx: CanvasRenderingContext2D, size:number, cellPadding: number) {

@@ -1,16 +1,19 @@
-import React from 'react';
+import React, {createRef} from 'react';
 import {GridState} from "./model/grid";
 import GridConfig from "./model/gridConfig";
+import Vector from "./model/vector";
 
-interface ComponentsProps { gridState: GridState, gridConfig: GridConfig, animation?: "loadingIn" | "poppingIn" }
-interface ComponentsState { ctx: CanvasRenderingContext2D | undefined }
+interface ComponentsProps { gridState: GridState, gridConfig: GridConfig, animation?: "loadingIn" | "poppingIn", handleCellClick: (cell: Vector, fillMode: boolean) => void }
+interface ComponentsState { ctx: CanvasRenderingContext2D | undefined, fillMode: boolean }
 
 export default class Canvas extends React.Component<ComponentsProps, ComponentsState> {
+	private canvasRef = createRef<HTMLCanvasElement>();
 	constructor(props: ComponentsProps) {
 		super(props);
 
 		this.state = {
-			ctx: undefined
+			ctx: undefined,
+			fillMode: false
 		};
 	}
 
@@ -26,10 +29,9 @@ export default class Canvas extends React.Component<ComponentsProps, ComponentsS
 	}
 
 	setupCanvas(cb?: () => void) {
-		let canvas = document.getElementById('canvas') as HTMLCanvasElement;
-		if (!canvas) return;
+		if (!this.canvasRef.current) return;
 
-		let ctx = canvas.getContext("2d");
+		let ctx = this.canvasRef.current.getContext("2d");
 
 		if (!ctx) return;
 		ctx.imageSmoothingEnabled = false;
@@ -54,11 +56,72 @@ export default class Canvas extends React.Component<ComponentsProps, ComponentsS
 		}
 	}
 
+	getCursorPosition(event: React.MouseEvent, canvasRef: HTMLCanvasElement) {
+		let rect = canvasRef.getBoundingClientRect();
+		return new Vector(event.clientX - rect.left, event.clientY - rect.top);
+	}
+
+	onMouseMove(event: React.MouseEvent) {
+		if (event.buttons === 1) {
+			this.onMouseMoveDown(event);
+		}
+	}
+
+	onMouseMoveDown(event: React.MouseEvent) {
+		const clickedCell = this.calculateClickedCell(event);
+		if (clickedCell) this.props.handleCellClick(clickedCell, this.state.fillMode);
+	}
+
+	onClick(event: React.MouseEvent) {
+		const clickedCell = this.calculateClickedCell(event);
+		if (clickedCell) {
+			let newFillMode = this.calculateFillMode(clickedCell);
+			this.setState({fillMode: newFillMode});
+
+			this.props.handleCellClick(clickedCell, newFillMode)
+		}
+	}
+
+	calculateFillMode(clickedCell: Vector) {
+		return !this.props.gridState[clickedCell.y][clickedCell.x].alive
+	}
+
+	calculateClickedCell(event: React.MouseEvent) {
+		if (!this.canvasRef.current) return;
+
+		const cursorPos = this.getCursorPosition(event, this.canvasRef.current);
+		return this.calculateClickedCellFromCursor(cursorPos);
+	}
+
+	calculateClickedCellFromCursor(cursorPos: Vector): Vector | null {
+		let xIndex = this.calculateClickedCellIn1D(cursorPos.x);
+		let yIndex = this.calculateClickedCellIn1D(cursorPos.y);
+
+		if (xIndex !== null && yIndex !== null) {
+			return new Vector(xIndex, yIndex);
+		} else {
+			return null
+		}
+	}
+
+	calculateClickedCellIn1D(cursorPos: number): number | null {
+		let posModulo = (cursorPos - 2) % (this.props.gridConfig.cellSize + this.props.gridConfig.cellPadding);
+
+		if (posModulo < this.props.gridConfig.cellSize) {
+			return Math.floor(cursorPos / (this.props.gridConfig.cellSize + this.props.gridConfig.cellPadding));
+		} else {
+			return null
+		}
+	}
+
 	render() {
 		return(
 			<canvas
 				id="canvas"
+				ref={this.canvasRef}
 				className={""}
+				onMouseMove={this.onMouseMove.bind(this)}
+				onMouseDown={this.onClick.bind(this)}
 				width={this.props.gridConfig.size.w}
 				height={this.props.gridConfig.size.h}>
 

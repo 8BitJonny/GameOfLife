@@ -1,4 +1,5 @@
 import CanvasCell from "../CanvasCell";
+import Vector from "./vector";
 
 export interface GridState extends Array<Array<CanvasCell>> {
 	[index: number]: CanvasCell[];
@@ -35,6 +36,11 @@ export default class Grid {
 			emptyColumn.push( new CanvasCell(columnIndex, rowIndex) );
 		}
 		return emptyColumn;
+	}
+
+	toggleCell(index: Vector, fillMode: boolean) {
+		this.state[index.y][index.x].toggle(fillMode);
+		return new Grid(this.state);
 	}
 
 	calculateNextGrid(): Grid {

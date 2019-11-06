@@ -4,6 +4,7 @@ import Canvas from "./Canvas";
 import GridConfig from "./model/gridConfig";
 import {calculateCellCountFromPixelSize, calculatePixelSizeFromCellCount} from "./utils";
 import Grid from "./model/grid";
+import Vector from "./model/vector";
 
 interface ComponentsProps {  }
 interface ComponentsState { play: boolean, edit: boolean, gridConfig: GridConfig, gridState: Grid, animation: "loadingIn" | "poppingIn" | undefined }
@@ -92,6 +93,14 @@ class GridComponent extends React.Component<ComponentsProps, ComponentsState> {
 		requestAnimationFrame(this.handleNextState.bind(this, nextStepTime));
 	}
 
+	handleCellClick(index: Vector, fillMode: boolean) {
+		if (this.state.edit) {
+			this.setState({
+				gridState: this.state.gridState.toggleCell(index, fillMode)
+			})
+		}
+	}
+
 	render () {
 		return (
 			<div className="bg-darkgreen flex-grow flex-shrink overflow-hidden">
@@ -100,7 +109,8 @@ class GridComponent extends React.Component<ComponentsProps, ComponentsState> {
 						<Canvas
 							gridState={this.state.gridState.state}
 							gridConfig={this.state.gridConfig}
-							animation={this.state.animation}/>
+							animation={this.state.animation}
+							handleCellClick={this.handleCellClick.bind(this)}/>
 					</div>
 				</div>
 			</div>
