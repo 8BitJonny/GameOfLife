@@ -14,7 +14,8 @@
     "test": "jest"
   },
   "dependencies": {
-    "nuxt": "^2.0.0"
+    "nuxt": "^2.0.0",
+    "vuex": "latest"
   },
   "devDependencies": {
     "@nuxtjs/tailwindcss": "^1.0.0",
