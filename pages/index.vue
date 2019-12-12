@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import NavBar from '~/components/NavBar.vue'
-import Grid from '~/components/Grid.vue'
+import NavBar from '../components/NavBar.vue'
+import Grid from '../components/Grid.vue'
 
 export default {
   components: {

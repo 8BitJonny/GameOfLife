@@ -22,7 +22,7 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import MinimalButton from '~/components/MinimalButton.vue'
+import MinimalButton from '../components/MinimalButton.vue'
 
 export default {
   components: {
