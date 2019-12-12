@@ -13,9 +13,9 @@
       <minimal-button @click="setGridState('PLAY')" v-else>
         Play
       </minimal-button>
-      <minimal-button>Randomize</minimal-button>
+      <minimal-button @click="setGridState('RANDOM')">Randomize</minimal-button>
       <minimal-button @click="setGridState('EDIT')">Edit</minimal-button>
-      <minimal-button>Clear</minimal-button>
+      <minimal-button @click="setGridState('CLEAR')">Clear</minimal-button>
     </div>
   </div>
 </template>

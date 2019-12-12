@@ -1,7 +1,9 @@
 export const controlState = Object.freeze({
   PLAY: 'PLAY',
   PAUSE: 'PAUSE',
-  EDIT: 'EDIT'
+  EDIT: 'EDIT',
+  RANDOM: 'RANDOM',
+  CLEAR: 'CLEAR'
 })
 
 export const state = () => ({
