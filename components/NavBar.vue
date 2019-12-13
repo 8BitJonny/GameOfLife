@@ -6,7 +6,6 @@
       <span class="text-white font-extrabold text-3xl">Game of Life</span>
     </div>
     <div id="controls" class="h-full my-auto py-1 text-xl">
-      <minimal-button>{{ gridState }}</minimal-button>
       <minimal-button @click="setGridState('PAUSE')" v-if="gridState === 'PLAY'"
         >Pause</minimal-button
       >

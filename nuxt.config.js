@@ -4,7 +4,7 @@ export default {
    ** Headers of the page
    */
   head: {
-    title: "Game of Life",
+    title: 'Game of Life',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -16,7 +16,10 @@ export default {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
-      { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css?family=Rubik&amp;display=swap'}
+      {
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/css?family=Rubik&amp;display=swap'
+      }
     ]
   },
   /*
@@ -38,7 +41,8 @@ export default {
     // Doc: https://github.com/nuxt-community/eslint-module
     '@nuxtjs/eslint-module',
     // Doc: https://github.com/nuxt-community/nuxt-tailwindcss
-    '@nuxtjs/tailwindcss'
+    '@nuxtjs/tailwindcss',
+    '@nuxt/typescript-build'
   ],
   /*
    ** Nuxt.js modules

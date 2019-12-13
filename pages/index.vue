@@ -20,5 +20,6 @@ export default {
 <style>
 .app {
   font-family: 'Rubik', sans-serif;
+  height: 100vh;
 }
 </style>
