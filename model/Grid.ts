@@ -38,6 +38,26 @@ export default class Grid {
     return emptyColumn;
   }
 
+  findCellFromCoordinates(coordinate: {x: number, y: number}, cellConfig: {size: number, padding: number}) {
+    let xIndex = this.calculateClickedCellIn1D(coordinate.x, cellConfig);
+    let yIndex = this.calculateClickedCellIn1D(coordinate.y, cellConfig);
+
+    if (xIndex !== null && yIndex !== null) {
+      return new Vector(xIndex, yIndex);
+    } else return null
+  }
+
+  calculateClickedCellIn1D(cursorPos: number, cellConfig: {size: number, padding: number}): number | null {
+    let posModulo = (cursorPos) % (cellConfig.size + cellConfig.padding);
+    const paddingThreshHold = 0.3;
+
+    if (posModulo < cellConfig.size + (paddingThreshHold * cellConfig.padding)) {
+      return Math.floor(cursorPos / (cellConfig.size + cellConfig.padding));
+    } else {
+      return null
+    }
+  }
+
   toggleCell(index: Vector, fillMode: boolean) {
     this.state[index.y][index.x].toggle(fillMode);
     return new Grid(this.state);

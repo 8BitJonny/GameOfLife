@@ -9,6 +9,7 @@
 
 <script>
 import { GridState } from '../model/Grid.ts'
+import ClickHandler from '../model/ClickHandler'
 
 export default {
   props: {
@@ -24,13 +25,19 @@ export default {
   },
   data() {
     return {
-      ctx: undefined
+      ctx: undefined,
+      clickHandler: undefined
     }
   },
   mounted() {
     this.setupCanvas(() => {
       this.drawCycle()
     })
+
+    this.clickHandler = new ClickHandler(
+      this.$refs.canvas,
+      this.handleClick.bind(this)
+    )
   },
   methods: {
     setupCanvas(callback) {
@@ -62,20 +69,8 @@ export default {
     clearCanvas(ctx) {
       ctx.clearRect(0, 0, this.gridConfig.size.w, this.gridConfig.size.h)
     },
-    onMouseMove(event) {
-      const rect = this.$refs.canvas.getBoundingClientRect()
-      const x = event.clientX - rect.left
-      const y = event.clientY - rect.top
-
-      this.clearCanvas(this.ctx)
-
-      // add a single rect to path:
-      this.ctx.beginPath()
-      this.ctx.rect(0, 0, 10, 10)
-
-      // check if we hover it, fill red, if not fill it blue
-      this.ctx.fillStyle = this.ctx.isPointInPath(x, y) ? 'red' : 'blue'
-      this.ctx.fill()
+    handleClick({ x, y }) {
+      this.$emit('click', { x, y })
     }
   }
 }

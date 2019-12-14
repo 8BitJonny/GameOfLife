@@ -5,7 +5,12 @@
       ref="gridWrapper"
       class="h-full flex justify-center content-center"
     >
-      <Canvas :gridConfig="gridConfig" :gridState="gridState.state"> </Canvas>
+      <Canvas
+        :gridConfig="gridConfig"
+        :gridState="gridState.state"
+        v-on:click="onClick"
+      >
+      </Canvas>
     </div>
   </div>
 </template>
@@ -41,6 +46,16 @@ export default {
     window.removeEventListener('resize', this.handleResize)
   },
   methods: {
+    onClick(event) {
+      const cellIndex = this.gridState.findCellFromCoordinates(
+        { x: event.x, y: event.y },
+        { size: this.gridConfig.cellSize, padding: this.gridConfig.cellPadding }
+      )
+
+      if (!cellIndex) return
+
+      this.gridState.toggleCell(cellIndex, true)
+    },
     handleResize() {
       const wrapperElement = this.$refs.gridWrapper
       if (wrapperElement) {
