@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-full h-12 flex-shrink-0 px-6 flex flex-wrap items-center justify-between bg-black"
+    class="w-full h-12 flex-shrink-0 px-6 flex flex-wrap items-center justify-between bg-black select-none"
   >
     <div>
       <span class="text-white font-extrabold text-3xl">Game of Life</span>
