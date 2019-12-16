@@ -6,15 +6,17 @@
       <span class="text-white font-extrabold text-3xl">Game of Life</span>
     </div>
     <div id="controls" class="h-full my-auto py-1 text-xl">
-      <minimal-button @click="setGridState('PAUSE')" v-if="gridState === 'PLAY'"
+      <minimal-button @click="setGridMode('PAUSE')" v-if="gridMode === 'PLAY'"
         >Pause</minimal-button
       >
-      <minimal-button @click="setGridState('PLAY')" v-else>
+      <minimal-button @click="setGridMode('PLAY')" v-else>
         Play
       </minimal-button>
-      <minimal-button @click="setGridState('RANDOM')">Randomize</minimal-button>
-      <minimal-button @click="setGridState('EDIT')">Edit</minimal-button>
-      <minimal-button @click="setGridState('CLEAR')">Clear</minimal-button>
+      <minimal-button @click="emitGridEvent('RANDOM')"
+        >Randomize</minimal-button
+      >
+      <minimal-button @click="setGridMode('EDIT')">Edit</minimal-button>
+      <minimal-button @click="emitGridEvent('CLEAR')">Clear</minimal-button>
     </div>
   </div>
 </template>
@@ -28,12 +30,13 @@ export default {
     MinimalButton
   },
   computed: mapGetters({
-    gridState: 'gridControlState/get'
+    gridMode: 'gridMode/get'
   }),
   methods: {
-    setGridState(newGridState) {
-      this.$store.commit('gridControlState/set', newGridState)
-    }
+    setGridMode(newGridState) {
+      this.$store.commit('gridMode/set', newGridState)
+    },
+    emitGridEvent() {}
   }
 }
 </script>
