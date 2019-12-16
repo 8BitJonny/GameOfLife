@@ -32,10 +32,10 @@ export default {
       gridConfig: {
         cellSize: 14,
         cellPadding: 7,
-        cellCount: { h: 30, w: 60 },
+        cellCount: { rowCount: 30, columnCount: 60 },
         size: { h: 623, w: 1253 }
       },
-      gridState: Grid.generateEmptyState(30, 60)
+      gridState: Grid.generateEmptyState({ rowCount: 30, columnCount: 60 })
     }
   },
   mounted() {
@@ -61,15 +61,11 @@ export default {
       switch (event) {
         case 'RANDOM':
           this.gridState = Grid.generateNewRandomState(
-            this.gridConfig.cellCount.h,
-            this.gridConfig.cellCount.w
+            this.gridConfig.cellCount
           )
           break
         case 'CLEAR':
-          this.gridState = Grid.generateEmptyState(
-            this.gridConfig.cellCount.h,
-            this.gridConfig.cellCount.w
-          )
+          this.gridState = Grid.generateEmptyState(this.gridConfig.cellCount)
           break
         default:
       }
@@ -77,12 +73,12 @@ export default {
     handleResize() {
       const wrapperElement = this.$refs.gridWrapper
       if (wrapperElement) {
-        const h = calculateCellCountFromPixelSize(
+        const rowCount = calculateCellCountFromPixelSize(
           this.gridConfig.cellSize,
           this.gridConfig.cellPadding,
           wrapperElement.clientHeight
         )
-        const w = calculateCellCountFromPixelSize(
+        const columnCount = calculateCellCountFromPixelSize(
           this.gridConfig.cellSize,
           this.gridConfig.cellPadding,
           wrapperElement.clientWidth
@@ -91,17 +87,19 @@ export default {
         const pixelH = calculatePixelSizeFromCellCount(
           this.gridConfig.cellSize,
           this.gridConfig.cellPadding,
-          h
+          rowCount
         )
         const pixelW = calculatePixelSizeFromCellCount(
           this.gridConfig.cellSize,
           this.gridConfig.cellPadding,
-          w
+          columnCount
         )
 
         this.gridConfig.size = { h: pixelH, w: pixelW }
-        this.gridConfig.cellCount = { h, w }
-        this.gridState = this.gridState.adjustGridToNewSize(h, w)
+        this.gridConfig.cellCount = { rowCount, columnCount }
+        this.gridState = this.gridState.adjustGridToNewSize(
+          this.gridConfig.cellCount
+        )
       }
     }
   }

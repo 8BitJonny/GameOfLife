@@ -17,6 +17,10 @@ export default {
       size: {
         h: { type: Number },
         w: { type: Number }
+      },
+      cellCount: {
+        rowCount: { type: Number },
+        columnCount: { type: Number }
       }
     },
     gridState: {
@@ -56,8 +60,8 @@ export default {
       requestAnimationFrame(this.drawCycle.bind(this))
     },
     drawCanvas(ctx) {
-      for (let i = 0; i < this.gridConfig.cellCount.h; i++) {
-        for (let j = 0; j < this.gridConfig.cellCount.w; j++) {
+      for (let i = 0; i < this.gridConfig.cellCount.rowCount; i++) {
+        for (let j = 0; j < this.gridConfig.cellCount.columnCount; j++) {
           this.gridState[i][j].draw(
             ctx,
             this.gridConfig.cellSize,

@@ -11,21 +11,21 @@ export default class Grid {
     this.state = grid;
   }
 
-  static generateNewRandomState(rowCount: number, columnCount: number): Grid {
+  static generateNewRandomState(size: {rowCount: number, columnCount: number}): Grid {
     let newGridObject: GridState = [];
-    for (let rowIndex = 0; rowIndex < rowCount; rowIndex ++) {
+    for (let rowIndex = 0; rowIndex < size.rowCount; rowIndex ++) {
       newGridObject[rowIndex] = [];
-      for (let columnIndex = 0; columnIndex < columnCount; columnIndex ++) {
+      for (let columnIndex = 0; columnIndex < size.columnCount; columnIndex ++) {
         newGridObject[rowIndex].push( new CanvasCell(columnIndex, rowIndex, Math.random() > 0.7 ? 1 : 0) );
       }
     }
     return new Grid(newGridObject);
   }
 
-  static generateEmptyState(rowCount: number, columnCount: number): Grid {
+  static generateEmptyState(size: {rowCount: number, columnCount: number}): Grid {
     let newGridObject: GridState = [];
-    for (let rowIndex = 0; rowIndex < rowCount; rowIndex ++) {
-      newGridObject[rowIndex] = this.generateEmptyColumn(rowIndex, columnCount);
+    for (let rowIndex = 0; rowIndex < size.rowCount; rowIndex ++) {
+      newGridObject[rowIndex] = this.generateEmptyColumn(rowIndex, size.columnCount);
     }
     return new Grid(newGridObject);
   }
@@ -102,14 +102,14 @@ export default class Grid {
       && cellIndex.columnIndex >= 0 && cellIndex.columnIndex < this.state[0].length;
   }
 
-  adjustGridToNewSize(newHeight: number, newWidth: number): Grid {
+  adjustGridToNewSize(size: {rowCount: number, columnCount: number}): Grid {
     const oldHeight = this.state.length, oldWidth = this.state[0].length;
 
     for (let rowIndex = 0; rowIndex < oldHeight; rowIndex ++) {
-      this.state[rowIndex] = Grid.truncateOrFillWith(newWidth, oldWidth, this.state[rowIndex],(index) => {return new CanvasCell(index, rowIndex)});
+      this.state[rowIndex] = Grid.truncateOrFillWith(size.columnCount, oldWidth, this.state[rowIndex],(index) => {return new CanvasCell(index, rowIndex)});
     }
 
-    this.state = Grid.truncateOrFillWith(newHeight, oldHeight, this.state ,(index) => Grid.generateEmptyColumn(index, newWidth));
+    this.state = Grid.truncateOrFillWith(size.rowCount, oldHeight, this.state ,(index) => Grid.generateEmptyColumn(index, size.columnCount));
 
     return new Grid(this.state);
   }
