@@ -6,25 +6,16 @@
       <span class="text-white font-extrabold text-3xl">Game of Life</span>
     </div>
     <div id="controls" class="h-full my-auto py-1 text-xl">
-      <minimal-button @click="setGridMode('PAUSE')" v-if="gridMode === 'PLAY'"
-        >Pause</minimal-button
-      >
       <minimal-button
-        @click="
-          () => {
-            setGridMode('PLAY')
-            emitGridEvent('PLAY')
-          }
-        "
-        v-else
+        v-for="item in navigationItems"
+        v-if="item.displayCondition()"
+        :disabled="actionShouldBeDisabled(item.id)"
+        v-on:click="item.action"
+        v-bind:class="{
+          'opacity-50 cursor-not-allowed': actionShouldBeDisabled(item.id)
+        }"
+        >{{ item.text }}</minimal-button
       >
-        Play
-      </minimal-button>
-      <minimal-button @click="emitGridEvent('RANDOM')"
-        >Randomize</minimal-button
-      >
-      <minimal-button @click="setGridMode('EDIT')">Edit</minimal-button>
-      <minimal-button @click="emitGridEvent('CLEAR')">Clear</minimal-button>
     </div>
   </div>
 </template>
@@ -37,6 +28,45 @@ export default {
   components: {
     MinimalButton
   },
+  data() {
+    return {
+      navigationItems: [
+        {
+          id: 'PLAY',
+          text: 'Play',
+          displayCondition: () => this.gridMode !== 'PLAY',
+          action: () => {
+            this.setGridMode('PLAY')
+            this.emitGridEvent('PLAY')
+          }
+        },
+        {
+          id: 'PAUSE',
+          text: 'Pause',
+          displayCondition: () => this.gridMode === 'PLAY',
+          action: () => this.setGridMode('PAUSE')
+        },
+        {
+          id: 'RANDOM',
+          text: 'Random',
+          displayCondition: () => true,
+          action: () => this.emitGridEvent('RANDOM')
+        },
+        {
+          id: 'EDIT',
+          text: 'Edit',
+          displayCondition: () => true,
+          action: () => this.setGridMode('EDIT')
+        },
+        {
+          id: 'CLEAR',
+          text: 'Clear',
+          displayCondition: () => true,
+          action: () => this.emitGridEvent('CLEAR')
+        }
+      ]
+    }
+  },
   computed: mapGetters({
     gridMode: 'gridMode/get'
   }),
@@ -46,6 +76,12 @@ export default {
     },
     emitGridEvent(event) {
       this.$bus.$emit('gridEvent', event)
+    },
+    actionShouldBeDisabled(action) {
+      if (this.gridMode === 'PLAY') {
+        return action !== 'PAUSE'
+      }
+      return false
     }
   }
 }
