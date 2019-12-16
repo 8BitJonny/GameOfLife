@@ -41,6 +41,7 @@ export default {
   mounted() {
     this.handleResize()
     window.addEventListener('resize', this.handleResize)
+    this.$bus.$on('gridEvent', this.handleGridEvents)
   },
   beforeDestroy() {
     window.removeEventListener('resize', this.handleResize)
@@ -55,6 +56,23 @@ export default {
       if (!cellIndex) return
 
       this.gridState.toggleCell(cellIndex, true)
+    },
+    handleGridEvents(event) {
+      switch (event) {
+        case 'RANDOM':
+          this.gridState = Grid.generateNewRandomState(
+            this.gridConfig.cellCount.h,
+            this.gridConfig.cellCount.w
+          )
+          break
+        case 'CLEAR':
+          this.gridState = Grid.generateEmptyState(
+            this.gridConfig.cellCount.h,
+            this.gridConfig.cellCount.w
+          )
+          break
+        default:
+      }
     },
     handleResize() {
       const wrapperElement = this.$refs.gridWrapper

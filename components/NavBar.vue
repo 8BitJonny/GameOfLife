@@ -36,7 +36,9 @@ export default {
     setGridMode(newGridState) {
       this.$store.commit('gridMode/set', newGridState)
     },
-    emitGridEvent() {}
+    emitGridEvent(event) {
+      this.$bus.$emit('gridEvent', event)
+    }
   }
 }
 </script>
