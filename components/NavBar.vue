@@ -9,7 +9,15 @@
       <minimal-button @click="setGridMode('PAUSE')" v-if="gridMode === 'PLAY'"
         >Pause</minimal-button
       >
-      <minimal-button @click="setGridMode('PLAY')" v-else>
+      <minimal-button
+        @click="
+          () => {
+            setGridMode('PLAY')
+            emitGridEvent('PLAY')
+          }
+        "
+        v-else
+      >
         Play
       </minimal-button>
       <minimal-button @click="emitGridEvent('RANDOM')"

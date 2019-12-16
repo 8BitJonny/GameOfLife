@@ -16,6 +16,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import Canvas from '../components/Canvas.vue'
 import {
   calculateCellCountFromPixelSize,
@@ -30,6 +31,7 @@ export default {
   data() {
     return {
       gridConfig: {
+        speed: 150,
         cellSize: 14,
         cellPadding: 7,
         cellCount: { rowCount: 30, columnCount: 60 },
@@ -38,6 +40,9 @@ export default {
       gridState: Grid.generateEmptyState({ rowCount: 30, columnCount: 60 })
     }
   },
+  computed: mapGetters({
+    gridMode: 'gridMode/get'
+  }),
   mounted() {
     this.handleResize()
     window.addEventListener('resize', this.handleResize)
@@ -47,18 +52,22 @@ export default {
     window.removeEventListener('resize', this.handleResize)
   },
   methods: {
-    onClick(event) {
-      const cellIndex = this.gridState.findCellFromCoordinates(
-        { x: event.x, y: event.y },
-        { size: this.gridConfig.cellSize, padding: this.gridConfig.cellPadding }
-      )
+    calculateNextState(nextStepTime = 0) {
+      if (this.gridMode !== 'PLAY') return
 
-      if (!cellIndex) return
+      if (new Date().getTime() >= nextStepTime) {
+        nextStepTime = new Date().getTime() + this.gridConfig.speed
 
-      this.gridState.toggleCell(cellIndex, true)
+        this.gridState.calculateNextGrid()
+      }
+
+      requestAnimationFrame(this.calculateNextState.bind(this, nextStepTime))
     },
     handleGridEvents(event) {
       switch (event) {
+        case 'PLAY':
+          this.calculateNextState()
+          break
         case 'RANDOM':
           this.gridState = Grid.generateNewRandomState(
             this.gridConfig.cellCount
@@ -69,6 +78,16 @@ export default {
           break
         default:
       }
+    },
+    onClick(event) {
+      const cellIndex = this.gridState.findCellFromCoordinates(
+        { x: event.x, y: event.y },
+        { size: this.gridConfig.cellSize, padding: this.gridConfig.cellPadding }
+      )
+
+      if (!cellIndex) return
+
+      this.gridState.toggleCell(cellIndex, true)
     },
     handleResize() {
       const wrapperElement = this.$refs.gridWrapper
