@@ -19,8 +19,8 @@
 import { mapGetters } from 'vuex'
 import Canvas from '../components/Canvas.vue'
 import {
-  calculateCellCountFromPixelSize,
-  calculatePixelSizeFromCellCount
+  calculate1DCellCountFromPixelSize,
+  calculate1DPixelSizeFromCellCount
 } from '../utils'
 import Grid from '../model/Grid.ts'
 
@@ -92,32 +92,51 @@ export default {
     handleResize() {
       const wrapperElement = this.$refs.gridWrapper
       if (wrapperElement) {
-        const rowCount = calculateCellCountFromPixelSize(
+        this.gridConfig.cellCount = this.calculateCellCountFromPixelSize(
           this.gridConfig.cellSize,
           this.gridConfig.cellPadding,
-          wrapperElement.clientHeight
-        )
-        const columnCount = calculateCellCountFromPixelSize(
-          this.gridConfig.cellSize,
-          this.gridConfig.cellPadding,
-          wrapperElement.clientWidth
+          {
+            height: wrapperElement.clientHeight,
+            width: wrapperElement.clientWidth
+          }
         )
 
-        const pixelH = calculatePixelSizeFromCellCount(
+        this.gridConfig.size = this.calculatePixelSizeFromCellCount(
           this.gridConfig.cellSize,
           this.gridConfig.cellPadding,
-          rowCount
-        )
-        const pixelW = calculatePixelSizeFromCellCount(
-          this.gridConfig.cellSize,
-          this.gridConfig.cellPadding,
-          columnCount
+          this.gridConfig.cellCount
         )
 
-        this.gridConfig.size = { h: pixelH, w: pixelW }
-        this.gridConfig.cellCount = { rowCount, columnCount }
         this.gridState = this.gridState.adjustGridToNewSize(
           this.gridConfig.cellCount
+        )
+      }
+    },
+    calculateCellCountFromPixelSize(cellSize, cellPadding, pixelSize) {
+      return {
+        rowCount: calculate1DCellCountFromPixelSize(
+          cellSize,
+          cellPadding,
+          pixelSize.height
+        ),
+        columnCount: calculate1DCellCountFromPixelSize(
+          cellSize,
+          cellPadding,
+          pixelSize.width
+        )
+      }
+    },
+    calculatePixelSizeFromCellCount(cellSize, cellPadding, cellCount) {
+      return {
+        h: calculate1DPixelSizeFromCellCount(
+          cellSize,
+          cellPadding,
+          cellCount.rowCount
+        ),
+        w: calculate1DPixelSizeFromCellCount(
+          cellSize,
+          cellPadding,
+          cellCount.columnCount
         )
       }
     }

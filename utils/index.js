@@ -6,7 +6,7 @@ export function remap(oldValue, oldRange, newRange) {
   )
 }
 
-export function calculateCellCountFromPixelSize(
+export function calculate1DCellCountFromPixelSize(
   cellSize,
   cellPadding,
   pixelSize
@@ -14,7 +14,7 @@ export function calculateCellCountFromPixelSize(
   return Math.floor((pixelSize + cellPadding) / (cellSize + cellPadding))
 }
 
-export function calculatePixelSizeFromCellCount(
+export function calculate1DPixelSizeFromCellCount(
   cellSize,
   cellPadding,
   cellCount
