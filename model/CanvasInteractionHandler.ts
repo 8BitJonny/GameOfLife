@@ -1,12 +1,10 @@
 import Vector from '~/model/Vector'
 
-export default class ClickHandler {
+export default class CanvasInteractionHandler {
   canvas: HTMLCanvasElement
-  firstClicked: boolean | undefined
   onClickNotifier: (pos: Vector) => void
 
   constructor(canvas: HTMLCanvasElement, onClickNotifier: (pos: Vector) => void) {
-    this.firstClicked = undefined
     this.canvas = canvas
     this.onClickNotifier = onClickNotifier
 

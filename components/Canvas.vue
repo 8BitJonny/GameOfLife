@@ -9,7 +9,7 @@
 
 <script>
 import { GridState } from '../model/Grid.ts'
-import ClickHandler from '../model/ClickHandler'
+import ClickHandler from '../model/CanvasInteractionHandler'
 
 export default {
   props: {
