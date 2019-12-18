@@ -43,7 +43,7 @@ export default class Grid {
     let yIndex = this.calculateClickedCellIn1D(coordinate.y, cellConfig);
 
     if (xIndex !== null && yIndex !== null) {
-      return new Vector(xIndex, yIndex);
+      return this.state[yIndex][xIndex];
     } else return null
   }
 
@@ -106,7 +106,7 @@ export default class Grid {
     const oldHeight = this.state.length, oldWidth = this.state[0].length;
 
     for (let rowIndex = 0; rowIndex < oldHeight; rowIndex ++) {
-      this.state[rowIndex] = Grid.truncateOrFillWith(size.columnCount, oldWidth, this.state[rowIndex],(index) => {return new CanvasCell(index, rowIndex)});
+      this.state[rowIndex] = Grid.truncateOrFillWith(size.columnCount, oldWidth, this.state[rowIndex],(index) => {return new CanvasCell(rowIndex, index)});
     }
 
     this.state = Grid.truncateOrFillWith(size.rowCount, oldHeight, this.state ,(index) => Grid.generateEmptyColumn(index, size.columnCount));

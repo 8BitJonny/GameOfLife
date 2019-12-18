@@ -8,7 +8,7 @@
       <Canvas
         :gridConfig="gridConfig"
         :gridState="gridState.state"
-        v-on:click="onClick"
+        v-on:click="gridClickHandler.onClick"
       >
       </Canvas>
     </div>
@@ -23,6 +23,7 @@ import {
   calculate1DPixelSizeFromCellCount
 } from '../utils'
 import Grid from '../model/Grid.ts'
+import GridClickHandler from '../model/GridClickHandler'
 
 export default {
   components: {
@@ -37,7 +38,11 @@ export default {
         cellCount: { rowCount: 30, columnCount: 60 },
         size: { h: 623, w: 1253 }
       },
-      gridState: Grid.generateEmptyState({ rowCount: 30, columnCount: 60 })
+      gridState: Grid.generateEmptyState({ rowCount: 30, columnCount: 60 }),
+      gridClickHandler: new GridClickHandler(
+        this.returnCellFromCoordinates,
+        this.toggleCell
+      )
     }
   },
   computed: mapGetters({
@@ -79,15 +84,14 @@ export default {
         default:
       }
     },
-    onClick(event) {
-      const cellIndex = this.gridState.findCellFromCoordinates(
-        { x: event.x, y: event.y },
+    returnCellFromCoordinates(coordinates) {
+      return this.gridState.findCellFromCoordinates(
+        { x: coordinates.x, y: coordinates.y },
         { size: this.gridConfig.cellSize, padding: this.gridConfig.cellPadding }
       )
-
-      if (!cellIndex) return
-
-      this.gridState.toggleCell(cellIndex, true)
+    },
+    toggleCell(...args) {
+      this.gridState.toggleCell(...args)
     },
     handleResize() {
       const wrapperElement = this.$refs.gridWrapper

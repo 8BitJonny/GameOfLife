@@ -2,14 +2,15 @@ import Vector from '~/model/Vector'
 
 export default class CanvasInteractionHandler {
   canvas: HTMLCanvasElement
-  onClickNotifier: (pos: Vector) => void
+  onClickNotifier: (pos: Vector, clicked: boolean) => void
 
   constructor(canvas: HTMLCanvasElement, onClickNotifier: (pos: Vector) => void) {
     this.canvas = canvas
     this.onClickNotifier = onClickNotifier
 
     this.canvas.addEventListener('mousemove', this.onMouseMove.bind(this))
-    this.canvas.addEventListener('click', this.onClickedOrMouseDrag.bind(this))
+    this.canvas.addEventListener('mousedown', this.onClickedOrMouseDrag.bind(this))
+    this.canvas.addEventListener('mouseup',this.onMouseUp.bind(this))
   }
 
   onMouseMove(event: MouseEvent) {
@@ -19,10 +20,18 @@ export default class CanvasInteractionHandler {
   }
 
   onClickedOrMouseDrag(event: MouseEvent) {
-    const rect = this.canvas.getBoundingClientRect()
-    const x = event.clientX - rect.left
-    const y = event.clientY - rect.top
+    this.onClickNotifier(this.calculatePosition(this.canvas, event), true)
+  }
 
-    this.onClickNotifier(new Vector(x,y))
+  onMouseUp(event: MouseEvent) {
+    this.onClickNotifier(this.calculatePosition(this.canvas, event), false)
+  }
+
+  calculatePosition(canvas: HTMLCanvasElement, event: MouseEvent) {
+    const rect = canvas.getBoundingClientRect()
+    return new Vector(
+      event.clientX - rect.left,
+      event.clientY - rect.top
+    )
   }
 }

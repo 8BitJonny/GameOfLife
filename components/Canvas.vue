@@ -73,8 +73,8 @@ export default {
     clearCanvas(ctx) {
       ctx.clearRect(0, 0, this.gridConfig.size.w, this.gridConfig.size.h)
     },
-    handleClick({ x, y }) {
-      this.$emit('click', { x, y })
+    handleClick({ x, y }, clicked) {
+      this.$emit('click', { x, y }, clicked)
     }
   }
 }
