@@ -12,7 +12,8 @@
         :disabled="actionShouldBeDisabled(item.id)"
         v-on:click="item.action"
         v-bind:class="{
-          'opacity-50 cursor-not-allowed': actionShouldBeDisabled(item.id)
+          'opacity-50 cursor-not-allowed': actionShouldBeDisabled(item.id),
+          underline: actionShouldBeUnderlined(item.id)
         }"
         >{{ item.text }}</minimal-button
       >
@@ -56,7 +57,13 @@ export default {
           id: 'EDIT',
           text: 'Edit',
           displayCondition: () => true,
-          action: () => this.setGridMode('EDIT')
+          action: () => {
+            if (this.gridMode === 'EDIT') {
+              this.setGridMode('PAUSE')
+            } else {
+              this.setGridMode('EDIT')
+            }
+          }
         },
         {
           id: 'CLEAR',
@@ -82,6 +89,9 @@ export default {
         return action !== 'PAUSE'
       }
       return false
+    },
+    actionShouldBeUnderlined(action) {
+      return action === 'EDIT' && this.gridMode === 'EDIT'
     }
   }
 }

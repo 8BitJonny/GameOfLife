@@ -2,12 +2,16 @@
   <canvas
     v-bind:height="gridConfig.size.h"
     v-bind:width="gridConfig.size.w"
+    v-bind:class="{
+      'cursor-pointer': isInEditMode
+    }"
     ref="canvas"
   >
   </canvas>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { GridState } from '../model/Grid.ts'
 import ClickHandler from '../model/CanvasInteractionHandler'
 
@@ -31,6 +35,14 @@ export default {
     return {
       ctx: undefined,
       clickHandler: undefined
+    }
+  },
+  computed: {
+    ...mapGetters({
+      gridMode: 'gridMode/get'
+    }),
+    isInEditMode() {
+      return this.gridMode === 'EDIT'
     }
   },
   mounted() {
@@ -74,7 +86,9 @@ export default {
       ctx.clearRect(0, 0, this.gridConfig.size.w, this.gridConfig.size.h)
     },
     handleClick({ x, y }, clicked) {
-      this.$emit('click', { x, y }, clicked)
+      if (this.isInEditMode || !clicked) {
+        this.$emit('click', { x, y }, clicked)
+      }
     }
   }
 }
