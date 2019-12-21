@@ -1,11 +1,11 @@
 <template>
   <canvas
+    ref="canvas"
     v-bind:height="gridConfig.size.h"
     v-bind:width="gridConfig.size.w"
     v-bind:class="{
       'cursor-pointer': isInEditMode
     }"
-    ref="canvas"
   >
   </canvas>
 </template>

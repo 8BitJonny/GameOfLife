@@ -8,6 +8,7 @@
     <div id="controls" class="h-full my-auto py-1 text-xl">
       <minimal-button
         v-for="item in navigationItems"
+        :key="item.id"
         v-if="item.displayCondition()"
         :disabled="actionShouldBeDisabled(item.id)"
         v-on:click="item.action"
