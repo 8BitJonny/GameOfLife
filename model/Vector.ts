@@ -5,4 +5,12 @@ export default class Vector {
     this.x = x;
     this.y = y;
   }
+
+  add(scalar: number) {
+    return new Vector(this.x + scalar, this.y + scalar)
+  }
+
+  mul(scalar: number) {
+    return new Vector(this.x * scalar, this.y * scalar)
+  }
 }

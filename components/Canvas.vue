@@ -34,6 +34,7 @@ export default {
   data() {
     return {
       ctx: undefined,
+      lastFrameTime: 0,
       clickHandler: undefined
     }
   },
@@ -64,20 +65,24 @@ export default {
 
       callback()
     },
-    drawCycle() {
+    drawCycle(time) {
+      const timeSinceLastFrame = time - this.lastFrameTime
+      this.lastFrameTime = time
+
       this.clearCanvas(this.ctx)
 
-      this.drawCanvas(this.ctx)
+      this.drawCanvas(this.ctx, timeSinceLastFrame)
 
       requestAnimationFrame(this.drawCycle.bind(this))
     },
-    drawCanvas(ctx) {
+    drawCanvas(ctx, timePassed) {
       for (let i = 0; i < this.gridConfig.cellCount.rowCount; i++) {
         for (let j = 0; j < this.gridConfig.cellCount.columnCount; j++) {
           this.gridState[i][j].draw(
             ctx,
             this.gridConfig.cellSize,
-            this.gridConfig.cellPadding
+            this.gridConfig.cellPadding,
+            timePassed
           )
         }
       }

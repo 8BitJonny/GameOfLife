@@ -1,14 +1,20 @@
 import Alive from "./alive";
 import Vector from "./vector";
+import CellAnimation from '../model/CellAnimation'
+
+const keyFrames = {0:0, 80:120, 100:100}
 
 export default class Cell {
   alive: Alive;
   nextAliveState: Alive | undefined;
-  index: {x: number, y: number};
+  index: Vector;
+  animation: any
   constructor(x: number, y: number, alive: Alive = 0) {
     this.alive = alive;
     this.nextAliveState = undefined;
-    this.index = {x: x, y: y}
+    this.index = new Vector(x,y)
+
+    this.animation = new CellAnimation(keyFrames, 750)
   }
 
   nextCellState(aliveNeighbours: number) {
@@ -26,22 +32,31 @@ export default class Cell {
     }
   }
 
-  toggle(state: boolean) {
-    this.alive = state ? 1 : 0;
-  }
-
-  draw(ctx: CanvasRenderingContext2D, size:number, cellPadding: number) {
-    ctx.beginPath();
-
-    let xPos = (size + cellPadding) * this.index.x;
-    let yPos = (size + cellPadding) * this.index.y;
-    let fillColor = "#1b331d";
-
-    if (this.alive === 1) {
-      fillColor = "#bababa"
+  toggle(newState: boolean) {
+    if (this.alive === 0 && newState) {
+      this.animation = new CellAnimation(keyFrames)
     }
 
-    this._drawRect(ctx, new Vector(xPos,yPos), new Vector(size,size), 5, fillColor);
+    this.alive = newState ? 1 : 0;
+  }
+
+  draw(ctx: CanvasRenderingContext2D, size:number, cellPadding: number, timePassed: number) {
+    let xPos = (size + cellPadding) * this.index.x
+    let yPos = (size + cellPadding) * this.index.y
+    let sizeVector = new Vector(size,size)
+    let posVector = new Vector(xPos, yPos)
+    let fillColor = this.alive ? "#bababa" : "#1b331d"
+
+    if (this.animation) {
+      sizeVector = this.animation.calculateSize(timePassed, sizeVector)
+      posVector = posVector.add((size - sizeVector.x) / 2)
+
+      if (this.animation.done) {
+        this.animation = undefined
+      }
+    }
+
+    this._drawRect(ctx, posVector, sizeVector, 5, fillColor);
   }
 
   _drawRect(ctx: CanvasRenderingContext2D, pos: Vector, size: Vector, borderRadius: number = 5, fillColor: string) {

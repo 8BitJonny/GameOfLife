@@ -21,3 +21,7 @@ export function calculate1DPixelSizeFromCellCount(
 ) {
   return cellCount * cellSize + (cellCount - 1) * cellPadding
 }
+
+export function lerp(base, target, t) {
+  return base + Math.max(Math.min(t, 1), 0) * (target - base)
+}
