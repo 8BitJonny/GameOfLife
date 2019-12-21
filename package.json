@@ -6,6 +6,8 @@
   "author": "8BitJonny",
   "private": true,
   "scripts": {
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -t -d dist",
     "dev": "nuxt",
     "build": "nuxt build",
     "start": "nuxt start",
@@ -14,6 +16,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "gh-pages": "^2.1.1",
     "nuxt": "^2.0.0",
     "vuex": "latest"
   },
