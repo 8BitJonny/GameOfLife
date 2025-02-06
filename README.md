@@ -1,13 +1,13 @@
 
 <a href="https://8bitjonny.github.io/GameOfLife" alt="Website Status">
-        <img src="https://img.shields.io/website/https/8bitjonny.github.io/GameOfLife.svg?up_message=online" /></a>
+        <img src="https://img.shields.io/website/https/gameoflife.timon.codes.svg?up_message=online" /></a>
 <a href="https://github.com/8BitJonny/GameOfLife/blob/master/package.json" alt="Version">
         <img src="https://img.shields.io/github/package-json/v/8BitJonny/GameOfLife.svg" /></a>
 <a href="https://github.com/8BitJonny/GameOfLife/blob/master/LICENSE.md" alt="License">
         <img src="https://img.shields.io/github/license/8BitJonny/GameOfLife.svg" /></a>        
 
 # Game of Life
-Website: [https://8bitjonny.github.io/GameOfLife](https://8bitjonny.github.io/GameOfLife)
+Website: [https://gameoflife.timon.codes](https://gameoflife.timon.codes)
 
 Conveys Game of Life with a modern browser interface to play with.
 
